@@ -1,6 +1,7 @@
 #include "Supplier.h"
 #include <string.h>
 #include "FillField.h"
+#include "BinarySearchTree.h"
 #include <stdio.h>
 
 /*allocating new binary search tree pointer. sets values to 0.*/
@@ -241,18 +242,15 @@ double averageOfSupplierMoney(supplierNode* tree ,int n){
 
 
 /*prints every supplier's details in the list*/
-void printSuppliers(supplierNode* tree){
-    if (!tree){
-        return ;
-    }
-    printSuppliers(tree->left);
+void printSupplierNode(Node  node){
+    printf("    \nName:  %s\n",((Supplier*)node->data)->name);
+    printf("    Supplier's authorized dealer number:  %0.f\n",((Supplier*)node->data)->id);
+    printf("    Phone number:  %s\n",((Supplier*)node->data)->phoneNumber);
+    printf("    Number of past transaction with supplier  :%0.f\n",((Supplier*)node->data)->pastTransactionsNumber);
+    printf("    Sum of past transaction with supplier  :%0.f\n",((Supplier*)node->data)->pastTransactionsSum);
 
-    printf("    \nName:  %s\n",tree->supplier.name);
-    printf("    Supplier's authorized dealer number:  %0.f\n",tree->supplier.id);
-    printf("    Phone number:  %s\n",tree->supplier.phoneNumber);
-    printf("    Number of past transaction with supplier  :%0.f\n",tree->supplier.pastTransactionsNumber);
-    printf("    Sum of past transaction with supplier  :%0.f\n",tree->supplier.pastTransactionsSum);
-
-    printSuppliers(tree->right);
 }
 
+double getSupplierAvgField(Node node){
+    return ((Supplier*)node->data)->pastTransactionsSum;
+}
