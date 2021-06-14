@@ -33,9 +33,11 @@ typedef struct {
 Tree createCarTree();
 
 /*adds new car to the cars list[index]. return 1 if succeed, 0 if failed*/
-Data addNewCar();
+Data setCarData();
 
-/*help function to call in addNewCar*/
+int addNewCar(Tree tree);
+
+/*help function to call in setCarData*/
 carNode* appendCarToTree(carNode* root, Car new_car, carBST* carTree);
 
 /*gets license number of a car and delete it from the list. returns 1 if succeed, 0 if failed.*/

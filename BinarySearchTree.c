@@ -29,7 +29,7 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
     Node newNode;
     if(!root){
         newNode = ALLOC(struct node ,1);
-        tree->cpy(newNode, newData);
+        newNode->data = newData;
         newNode->left = newNode->right = NULL;
         tree->size+=1;
         return newNode;
@@ -167,6 +167,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
                 followerAddr = &(follower->left);
                 follower = follower->left;
             }
+            freeNode(tree, node);
             tree->cpy(node, follower->data);
             *followerAddr = deleteNode(tree, follower, follower->data);
         }

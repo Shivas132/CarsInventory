@@ -3,7 +3,7 @@
 #include "FillField.h"
 
 /*adds new car to the cars tree.*/
-Data addNewCar() {
+Data setCarData() {
     Car* new_car;
     double licenseNum;
     char chassisNum[6];
@@ -58,6 +58,10 @@ Data addNewCar() {
     return new_car;
 }
 
+int addNewCar(Tree tree){
+    return addNewNode(tree);
+}
+
 /*free allocated memory*/
 void freeCar(Data data){
         FREE(((Car*)(data))->manufacturer);
@@ -70,8 +74,7 @@ void freeCar(Data data){
 int carCopy(Node dest, Data source){
     Car* carData = ((Car*)dest->data);
     Car* carSource = ((Car*)source);
-    freeCar(dest);
-    FREE(dest);
+
     carData->manufacturer = copyField(((Car*)source)->manufacturer); /*TODO*/
     ((Car*)(dest->data))->color = copyField(carSource->color); /*TODO*/
     ((Car*)(dest->data))->model = copyField(((Car*)source)->model);
@@ -121,7 +124,7 @@ double carCompare(void * license1,void * license2){
 
 /*allocating new binary search tree pointer. sets values to 0.*/
 Tree createCarTree(){
-    return treeCreate(carCopy, freeCar, carCompare, addNewCar);
+    return treeCreate(carCopy, freeCar, carCompare, setCarData);
 }
 
 
