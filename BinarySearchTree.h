@@ -1,8 +1,5 @@
-#ifndef GENERICFUCNCS_H
-#define GENERICFUCNCS_H
-
-
-
+#ifndef BTS_H
+#define BTS_H
 
 typedef struct Tree_s* Tree;
 typedef void* Data;
@@ -25,22 +22,23 @@ struct node {
     Node right;
 };
 
-
 struct Tree_s{
     Node root;
     int size;
-    Data (*cpy)(Data);
+    int(*cpy)(Node, Data);
     void (*fre)(Data);
-    int (*comp)(void*, void*);
+    double (*comp)(void*, void*);
     Data (*add)();
 };
 
 int addNewNode(Tree tree);
-Tree treeCreate(Data (cpy)(Data),void (fre)(Data), int (comp)(void*, void*), Data (add)());
+Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, void*), Data (*add)());
 int treeClear(Tree tree, Node root);
 Node appendNodeToTree(Tree tree, Node root, Data newData);
-int treeRemove(Tree tree, Node root, void* parameter);
+Node deleteNode(Tree tree, Node node, void* deletedData);
 linkedList findNode(Tree tree, linkedList (*findFunc)(Tree));
+double averageTree(Tree tree,Node node,double(*avgFunc)(Node));
+void freeNode(Tree tree, Node node);
 
 
 

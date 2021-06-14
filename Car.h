@@ -1,5 +1,6 @@
 #ifndef CAR_H
 #define CAR_H
+#include "BinarySearchTree.h"
 
 typedef struct{
     double licenseNum;
@@ -29,10 +30,10 @@ typedef struct {
 
 
 /*creates empty carNode*/
-carBST* createCarTree();
+Tree createCarTree();
 
 /*adds new car to the cars list[index]. return 1 if succeed, 0 if failed*/
-int addNewCar(carBST* tree);
+Data addNewCar();
 
 /*help function to call in addNewCar*/
 carNode* appendCarToTree(carNode* root, Car new_car, carBST* carTree);
@@ -46,6 +47,9 @@ int deleteAllCars(carBST* tree);
 /*returns the number of cars from the list with a given capacity*/
 int carNumberWithGivenCapacity(carNode* root, int cap);
 
+double carCompare(void * license1,void * license2);
+int carCopy(Node dest, Data source);
+void freeCar(Data data);
 
 
 #endif

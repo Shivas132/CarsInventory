@@ -1,5 +1,7 @@
 #ifndef SUPPLIER_H
 #define SUPPLIER_H
+#include "BinarySearchTree.h"
+
 
 typedef struct Supplier{
     double  id;
