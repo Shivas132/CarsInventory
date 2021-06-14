@@ -4,6 +4,10 @@ int main(){
 
     Tree tree = createCarTree();
     addNewNode(tree);
+     addNewNode(tree);
+     addNewNode(tree);
+
+
     check_for_exit();
     treeClear(tree, tree->root);
     check_for_exit();

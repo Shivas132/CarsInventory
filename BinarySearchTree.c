@@ -167,6 +167,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
                 followerAddr = &(follower->left);
                 follower = follower->left;
             }
+            freeNode(tree,node);
             tree->cpy(node, follower->data);
             *followerAddr = deleteNode(tree, follower, follower->data);
         }
