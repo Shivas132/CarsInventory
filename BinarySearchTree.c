@@ -50,7 +50,7 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
 int addNewNode(Tree tree){
     Data newData;
     newData = tree->add();
-    appendNodeToTree(tree,tree->root,newData);
+    tree->root = appendNodeToTree(tree,tree->root,newData);
     return 1;
 }
 
