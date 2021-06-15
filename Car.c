@@ -74,10 +74,7 @@ void freeCar(Data data){
 int carCopy(Node dest, Data source){
     Car* carData = ((Car*)dest->data);
     Car* carSource = ((Car*)source);
-<<<<<<< HEAD
-=======
 
->>>>>>> c16b1f1f490f4b478b73f56d4c351780ba82e13d
     carData->manufacturer = copyField(((Car*)source)->manufacturer); /*TODO*/
     ((Car*)(dest->data))->color = copyField(carSource->color); /*TODO*/
     ((Car*)(dest->data))->model = copyField(((Car*)source)->model);
