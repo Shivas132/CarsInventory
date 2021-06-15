@@ -1,20 +1,22 @@
-#ifndef BTS_H
-#define BTS_H
+#ifndef GDS_H
+#define GDS_H
 
 typedef struct Tree_s* Tree;
 typedef void* Data;
 typedef struct node* Node;
 typedef struct nodeList* nodeList;
-
+typedef struct linkedList* linkedList;
 
 struct nodeList{
     Data data;
     nodeList next;
 };
 
-typedef struct linkedList{
+struct linkedList{
     nodeList head;
-    }linkedList;
+    double (*comp)(void*, void*);
+    void (*fre)(Data);
+    };
 
 struct node {
     Data data;
@@ -33,12 +35,13 @@ struct Tree_s{
 
 int addNewNode(Tree tree);
 Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, void*), Data (*add)());
-int treeClear(Tree tree, Node root);
+void freeTree(Tree tree);
 Node appendNodeToTree(Tree tree, Node root, Data newData);
 Node deleteNode(Tree tree, Node node, void* deletedData);
-linkedList findNode(Tree tree, linkedList (*findFunc)(Tree));
+int findNode(Tree tree, Node node, Data findBy, linkedList list, nodeList* head);
 double averageTree(Tree tree,Node node,double(*avgFunc)(Node));
 void freeNode(Tree tree, Node node);
+void freeAllNodes(Tree tree, Node node);
 
 
 

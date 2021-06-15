@@ -1,51 +1,17 @@
 #include "Supplier.h"
 #include <string.h>
 #include "FillField.h"
-#include "BinarySearchTree.h"
+#include "GenericDataStructures.h"
 #include <stdio.h>
 
-/*allocating new binary search tree pointer. sets values to 0.*/
-supplierBST * createSupplierTree(){
-    supplierBST * newTree;
-    newTree = ALLOC(supplierBST, 1);
-    newTree->root = NULL;
-    newTree->size = 0;
-    return newTree;
-}
-
-/*help function to call in addNewSupplier. orders tree by IDs*/
-supplierNode * appendSupplierToTree(supplierNode * tree, Supplier newSupplier,supplierBST* supplierBst){
-    supplierNode * newNode;
-    if(!tree){
-        /*allocating new node. increasing size.*/
-        newNode = ALLOC(supplierNode ,1);
-        newNode->supplier = newSupplier;
-        newNode->left = newNode->right = NULL;
-        puts("supplier added to Data Base.");
-        supplierBst->size += 1;
-        return newNode;
-    }
-
-    /*prevent ID duplication*/
-    if(newSupplier.id == tree->supplier.id) {
-        puts("ID already exists in Data Base.");
-        return tree;
-    }
-    if(newSupplier.id < tree->supplier.id) /* Go left*/
-        tree->left = appendSupplierToTree(tree->left, newSupplier,supplierBst);
-    else /* Go right*/
-        tree->right = appendSupplierToTree(tree->right, newSupplier,supplierBst);
-
-    return tree;
-}
-
 /*adds new supplier to the head of suppliers list.*/
-int addNewSupplier(supplierBST* tree){
-    Supplier new_supplier;
+Data setSupplierData(){
+    Supplier* new_supplier;
     double  id;
     char  phoneNumber[11];
     double pastTransactionsNumber;
     double pastTransactionsSum;
+    new_supplier = ALLOC(Supplier, 1);
 
     printf("please enter details for your new supplier: \n");
 
@@ -53,133 +19,75 @@ int addNewSupplier(supplierBST* tree){
      * checking input validation*/
     puts("please enter supplier's id (10 digits): ");
     fillFieldDouble(&id, 10, 1);
-    new_supplier.id= id;
+    new_supplier->id= id;
 
     puts("please enter supplier's name: ");
-    new_supplier.name = fillFiledStrDynamic(2);
+    new_supplier->name = fillFiledStrDynamic(2);
 
     puts("please enter supplier's phone number (10 digits): ");
     fillFieldStr(phoneNumber, 10, 1, 1);
-    strcpy(new_supplier.phoneNumber, phoneNumber);
+    strcpy(new_supplier->phoneNumber, phoneNumber);
 
     puts("please enter number of transactions (5 digits): ");
     fillFieldDouble(&pastTransactionsNumber, 5, 1);
-    new_supplier.pastTransactionsNumber = pastTransactionsNumber;
+    new_supplier->pastTransactionsNumber = pastTransactionsNumber;
 
     puts("please enter sum of transactions (10 digits): ");
     fillFieldDouble(&pastTransactionsSum, 10, 1);
-    new_supplier.pastTransactionsSum = pastTransactionsSum;
+    new_supplier->pastTransactionsSum = pastTransactionsSum;
 
-    /*creates new node and puts it in the tree*/
-    tree->root = appendSupplierToTree(tree->root, new_supplier,tree);
-    return 1;
+    return new_supplier;
+}
+
+int addNewSupplier(Tree tree){
+    return addNewNode(tree);
 }
 
 /*free allocated memory*/
-int freeSupplier(supplierNode * node){
-    FREE(node->supplier.name);
-    FREE(node);
-    return 1;
+void freeSupplier(Data data){
+    FREE(((Supplier *)(data))->name);
 }
 
 /*copying data to destination node.
  * allocating new memory for dynamic allocated data copying.*/
-int deepCopySuppliersFields(supplierNode * dest, Supplier source){
-    freeSupplier(dest);
-    dest->supplier.name = copyField(source.name);
-    dest->supplier.pastTransactionsSum = source.pastTransactionsSum;
-    dest->supplier.pastTransactionsNumber= source.pastTransactionsSum;
-    dest->supplier.id=source.id;
-    strcpy(dest->supplier.phoneNumber, source.phoneNumber);
+int supplierCopy(Node dest, Data source){
+    Supplier * supData = ((Supplier *)dest->data);
+    Supplier * supSource = ((Supplier *)source);
+
+    supData->name = copyField(supSource->name);
+    supData->pastTransactionsSum = supSource->pastTransactionsSum;
+    supData->pastTransactionsNumber= supSource->pastTransactionsSum;
+    supData->id = supSource->id;
+    strcpy(supData->phoneNumber, supSource->phoneNumber);
     return 1;
 }
 
-/*delete supplierNode by given id*/
-/*id parameter always starts as 0.*/
-supplierNode * deleteSupplier(supplierNode * tree, double id, supplierBST* bst){
-    supplierNode *temp, *follower, **followerAddr;
-    double userInput = 0;
+double supplierCompare(void * id1,void * id2){
+    return *(double*)id1-*(double*)id2;
+}
 
-    if (!tree) {
-        return NULL;
-    }
+/*allocating new binary search tree pointer. sets values to 0.*/
+Tree createSupplierTree(){
+    return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
+}
+
+int deleteSupplier(Tree tree){
+    double* userInput = 0;
+
     /*gets input from user*/
-    if(id == 0){
-        puts("please enter id for the supplier you wish to delete:");
-        fillFieldDouble(&userInput, 10, 1);
-    }
-    else{
-        userInput = id;
-    }
+    puts("please enter id for the supplier you wish to delete:");
+    fillFieldDouble(userInput, 10, 1);
 
-    /* searching wanted supplier in tree's children*/
-    if(tree->supplier.id != userInput) {
-        /* Go left*/
-        if( userInput < (tree->supplier.id)) {
-            tree->left = deleteSupplier(tree->left, userInput, bst);
-        }
-            /* Go right*/
-        else {
-            tree->right = deleteSupplier(tree->right, userInput, bst);
-        }
-
-    }
-
-    else {
-
-/* Option 1: tree is a leaf*/
-        if (!(tree->left) && !(tree->right)) {
-            freeSupplier(tree);
-            bst->size -= 1;
-            return NULL;
-        }
-/* Option 2: tree has only one child*/
-        else if (!(tree->left)) {
-            temp = tree->right;
-            freeSupplier(tree);
-            bst->size -= 1;
-            return temp;
-        } else if (!(tree->right)) {
-            temp = tree->left;
-            freeSupplier(tree);
-            bst->size -= 1;
-            return temp;
-        }
-/* Option 3: tree has 2 children*/
-        else {
-            follower = tree->right;
-            followerAddr = &(tree->right);
-            while (follower->left) {
-                followerAddr = &(follower->left);
-                follower = follower->left;
-            }
-            deepCopySuppliersFields(tree, follower->supplier);
-            *followerAddr = deleteSupplier(follower, follower->supplier.id, bst);
-        }
-    }
-    return tree;
-}
-
-/*help function for deleteAllSuppliers.
- *free all the nodes from the tree.*/
-int deleteAllNodesSupplier(supplierNode * tree){
-    if(!tree){
-        return 1;
-    }
-    /*free children first*/
-    deleteAllNodesSupplier(tree->left);
-    deleteAllNodesSupplier(tree->right);
-    freeSupplier(tree);
+    deleteNode(tree, tree->root, userInput);
     return 1;
 }
 
-/*clears all tree nodes, sets values to 0.*/
-int deleteAllSuppliers(supplierBST * tree){
-    deleteAllNodesSupplier(tree->root);
-    tree->root =NULL;
+int deleteAllSuppliers(Tree tree){
+    freeAllNodes(tree, tree->root);
     tree->size = 0;
     return 1;
 }
+
 
 /*bubble sorting the current list of three greatest suppliers.*/
 void threeGreatestSupplierBubble(Supplier*  greatest){

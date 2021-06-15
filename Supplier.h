@@ -1,7 +1,6 @@
 #ifndef SUPPLIER_H
 #define SUPPLIER_H
-#include "BinarySearchTree.h"
-
+#include "GenericDataStructures.h"
 
 typedef struct Supplier{
     double  id;
@@ -23,16 +22,13 @@ typedef struct {
 } supplierBST;
 
 /*creates empty supplierNode*/
-supplierBST * createSupplierTree();
+Tree createSupplierTree();
 
-int addNewSupplier(supplierBST * tree);
+int addNewSupplier(Tree tree);
 
-/*help function to call in addNewSupplier*/
-supplierNode * appendSupplierToTree(supplierNode * tree, Supplier newSupplier,supplierBST* supplierBst);
+int deleteSupplier(Tree tree);
 
-supplierNode * deleteSupplier(supplierNode * tree, double id, supplierBST* bst);
-
-int deleteAllSuppliers(supplierBST * tree);
+int deleteAllSuppliers(Tree tree);
 
 double averageOfSupplierMoney(supplierNode* tree ,int n);
 

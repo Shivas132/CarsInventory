@@ -1,5 +1,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+#include "GenericDataStructures.h"
 
 typedef struct{
 
@@ -34,20 +35,20 @@ typedef struct clientList{
 
 
 /*creates empty clientNode*/
-clientBST * createClientTree();
+Tree createClientTree();
 
 /*adds new client to the client to clientTree. return 1 if succeed, 0 if failed*/
-int addNewClient(clientBST * tree);
+int addNewClient(Tree tree);
 
 /*help function to call in addNewClient*/
 clientNode * appendClientToTree(clientNode * tree, Client newClient,clientBST* clientBst);
 
 
 /*gets id number of a client and delete it from the list. returns the tree's root.*/
-clientNode * deleteClient(clientNode * tree, double id, clientBST* bst);
+int deleteClient(Tree tree);
 
-/*deletes all the clients from the list. returns 1.*/
-int deleteAllClients(clientBST * tree);
+/*deletes all the clients from the tree. returns 1.*/
+int deleteAllClients(Tree tree);
 
 void printClientCarsForGivenRentDate(clientNode * tree);
 
