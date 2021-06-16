@@ -1,6 +1,5 @@
-#include <assert.h>
 #include <string.h>
-#include "BinarySearchTree.h"
+#include "GenericDataStructures.h"
 #include "matam.h"
 
 Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, void*), Data(*add)()){
@@ -13,16 +12,6 @@ Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, 
     newTree->comp = comp;
     newTree->add = add;
     return newTree;
-}
-
-int treeClear(Tree tree, Node root){
-    if(!root){
-        return 1;
-    }
-    treeClear(tree, root->left);
-    treeClear(tree, root->right);
-    tree->fre(tree);
-    return 1;
 }
 
 Node appendNodeToTree(Tree tree, Node root, Data newData){
@@ -50,12 +39,8 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
 int addNewNode(Tree tree){
     Data newData;
     newData = tree->add();
-    appendNodeToTree(tree,tree->root,newData);
+    tree->root = appendNodeToTree(tree,tree->root,newData);
     return 1;
-}
-
-linkedList findNode(Tree tree, linkedList (*findFunc)(Tree)){
-    return findFunc(tree);
 }
 
 
@@ -174,6 +159,87 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
     }
     return node;
 }
+
+/*------------Linked List Functions------------------*/
+
+linkedList listCreate(double (*comp)(void*, void*), void (*fre)(Data)) {
+
+    linkedList new_list = ALLOC(struct linkedList, 1);
+    new_list->head = NULL;
+    new_list->comp = comp;
+    new_list->fre = fre;
+    return new_list;
+}
+
+void freeListNode(linkedList list, nodeList node){
+    list->fre(node->data);
+    FREE(node);
+}
+
+void freeListNodes(linkedList list, nodeList node){
+    nodeList nextOne;
+    if (!node){
+        return;
+    }
+    nextOne = node->next;
+    freeListNode(list, node);
+    freeListNodes(list, nextOne);
+}
+
+void freeList(linkedList list){
+    freeListNodes(list, list->head);
+    FREE(list);
+}
+
+nodeList createNode_l(Data data){
+    nodeList new = ALLOC(struct nodeList,1);
+    new->next = NULL;
+    new->data = data;
+    return new;
+}
+
+/*insert a node in linked list.*/
+int insertNewNode(nodeList * head, Data data, double (*comp)(void*, void*)){
+    nodeList newNode = NULL, curr;
+
+    /*initializing new node. */
+    newNode = createNode_l(data);
+
+    /*true when list is empty, or new node's data parameter is smaller then first node's*/
+    if ((*head == NULL) || comp((*head)->data, data) >= 0) {
+        newNode->next = *head;
+        *head = newNode;
+        return 1;
+    }
+
+    /*finds the first bigger node data*/
+    curr = *head;
+    while ((curr->next) && comp(curr->next->data,newNode->data) < 0) {
+        curr = curr->next;
+    }
+
+    /*inserting the new node after the current one.*/
+    newNode->next = curr->next;
+    curr->next = newNode;
+    return 1;
+}
+
+/*linked list has created outside of the function*/
+int findNode(Tree tree, Node node, Data findBy, linkedList list, nodeList* head){
+    if(!node){
+        return 0;
+    }
+    findNode(tree, node->left, findBy, list, head);
+
+    if(list->comp(node->data, findBy) == 0) {
+        insertNewNode(head, node->data, list->comp);
+    }
+    findNode(tree, node->right, findBy, list, head);
+
+    return 1;
+}
+
+
 
 
 

@@ -89,9 +89,36 @@ int carCopy(Node dest, Data source){
     return 1;
 }
 
+double carCompare(void * license1,void * license2){
+    return *(double*)license1-*(double*)license2;
+}
+
+/*allocating new binary search tree pointer. sets values to 0.*/
+Tree createCarTree(){
+    return treeCreate(carCopy, freeCar, carCompare, setCarData);
+}
+
+int deleteCar(Tree tree){
+    double* userInput = 0;
+
+    /*gets input from user*/
+    puts("please enter license num for the car you wish to delete:");
+    fillFieldDouble(userInput, 7, 1);
+
+    deleteNode(tree, tree->root, userInput);
+    return 1;
+}
+
+int deleteAllCars(Tree tree){
+    freeAllNodes(tree, tree->root);
+    tree->size = 0;
+    return 1;
+}
+
+
 /*returns the number of cars in the list with a given capacity*/
 /*cap parameter always starts as 0.*/
-int carNumberWithGivenCapacity(carNode* root, int cap){
+int carNumberWithGivenCapacity(Node root, int cap){
     int userInput, res = 0;
 
     if(!root){
@@ -108,7 +135,7 @@ int carNumberWithGivenCapacity(carNode* root, int cap){
     }
 
     /*increasing result by 1*/
-    if(root->car.velocity == userInput){
+    if(((Car*)root->data)->velocity == userInput){
         res++;
     }
 
@@ -118,14 +145,7 @@ int carNumberWithGivenCapacity(carNode* root, int cap){
     return res;
 }
 
-double carCompare(void * license1,void * license2){
-    return *(double*)license1-*(double*)license2;
-}
 
-/*allocating new binary search tree pointer. sets values to 0.*/
-Tree createCarTree(){
-    return treeCreate(carCopy, freeCar, carCompare, setCarData);
-}
 
 
 
