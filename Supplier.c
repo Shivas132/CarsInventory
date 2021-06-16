@@ -46,6 +46,7 @@ int addNewSupplier(Tree tree){
 /*free allocated memory*/
 void freeSupplier(Data data){
     FREE(((Supplier *)(data))->name);
+    FREE(data);
 }
 
 /*copying data to destination node.
