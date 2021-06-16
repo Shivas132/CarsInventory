@@ -30,11 +30,14 @@ int deleteSupplier(Tree tree);
 
 int deleteAllSuppliers(Tree tree);
 
-double averageOfSupplierMoney(supplierNode* tree ,int n);
+void averageOfSupplierMoney(Tree supplierTree);
 
-int threeGreatestSuppliers(supplierBST tree);
+int threeGreatestSuppliers(Tree tree);
 
-void printSuppliers(supplierNode* tree);
+void printSupplierNode(Node  node);
+
+double getPastTransactionsSum(Node node);
+
 
 
 #endif

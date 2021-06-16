@@ -2,25 +2,29 @@
 
 
 int main(){
-    Tree carTree = createCarTree();
-    Tree supplierTree = createSupplierTree();
-    addNewNode(carTree);
-    addNewNode(carTree);
-    addNewNode(carTree);
+        Tree carTree = createCarTree();
+        Tree supplierTree = createSupplierTree();
 
-    addNewNode(supplierTree);
-    addNewNode(supplierTree);
-    addNewNode(supplierTree);
+        /*addNewNode(carTree);
+        addNewNode(carTree);
+        addNewNode(carTree);*/
 
-    printTree(supplierTree->root,printSupplierNode);
-    check_for_exit();
-    freeTree(carTree);
-    freeTree(supplierTree);
-    check_for_exit();
+        addNewSupplier(supplierTree);
+        addNewSupplier(supplierTree);
+        addNewSupplier(supplierTree);
 
 
-    return 0;
-}
 
-return 0;
+
+        printTree(supplierTree->root,printSupplierNode);
+        averageOfSupplierMoney(supplierTree);
+        threeGreatestSuppliers(supplierTree);
+        check_for_exit();
+        deleteSupplier(supplierTree);
+        check_for_exit();
+        deleteAllSuppliers(supplierTree);
+        check_for_exit();
+
+
+        return 0;
 }

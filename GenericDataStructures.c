@@ -44,14 +44,14 @@ int addNewNode(Tree tree){
 }
 
 
-double averageTree(Tree tree,Node node, double(*avgFunc)(Node)){
+double averageTree(Tree tree,Node node, double(*avgParam)(Node)){
     double res;
     if (!tree){
         return 0;
     }
-    res =(avgFunc(node))/tree->size;
-    res += averageTree(tree,node->left,avgFunc);
-    res += averageTree(tree,node->right,avgFunc);
+    res = (avgParam(node)) / tree->size;
+    res += averageTree(tree, node->left, avgParam);
+    res += averageTree(tree, node->right, avgParam);
     return res;
 }
 
@@ -160,7 +160,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
     return node;
 }
 
-/*------------Linked List Functions------------------*/
+/*-----------------------Linked List Functions----------------------*/
 
 linkedList listCreate(double (*comp)(void*, void*), void (*fre)(Data)) {
 
@@ -225,16 +225,16 @@ int insertNewNode(nodeList * head, Data data, double (*comp)(void*, void*)){
 }
 
 /*linked list has created outside of the function*/
-int findNode(Tree tree, Node node, Data findBy, linkedList list, nodeList* head){
+int findNode(Node node, Data findBy, linkedList list, nodeList* head){
     if(!node){
         return 0;
     }
-    findNode(tree, node->left, findBy, list, head);
+    findNode(node->left, findBy, list, head);
 
     if(list->comp(node->data, findBy) == 0) {
         insertNewNode(head, node->data, list->comp);
     }
-    findNode(tree, node->right, findBy, list, head);
+    findNode(node->right, findBy, list, head);
 
     return 1;
 }
