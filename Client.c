@@ -55,6 +55,7 @@ int addNewClient(Tree tree){
 void freeClient(Data data){
     FREE(((Client*)(data))->name);
     FREE(((Client*)(data))->surname);
+    FREE(data);
 }
 
 /*copying data to destination node.

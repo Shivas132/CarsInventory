@@ -64,9 +64,10 @@ int addNewCar(Tree tree){
 
 /*free allocated memory*/
 void freeCar(Data data){
-        FREE(((Car*)(data))->manufacturer);
-        FREE(((Car*)(data))->color);
-        FREE(((Car*)(data))->model);
+    FREE(((Car*)(data))->manufacturer);
+    FREE(((Car*)(data))->color);
+    FREE(((Car*)(data))->model);
+    FREE(data);
 }
 
 /*copying data to destination node.
