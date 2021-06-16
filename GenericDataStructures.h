@@ -42,6 +42,7 @@ int findNode(Tree tree, Node node, Data findBy, linkedList list, nodeList* head)
 double averageTree(Tree tree,Node node,double(*avgFunc)(Node));
 void freeNode(Tree tree, Node node);
 void freeAllNodes(Tree tree, Node node);
+void printTree(Node node, void (*printFunc)(Node));
 
 
 

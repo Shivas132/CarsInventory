@@ -1,32 +1,26 @@
 #include "menu.h"
 
+
 int main(){
+    Tree carTree = createCarTree();
+    Tree supplierTree = createSupplierTree();
+    addNewNode(carTree);
+    addNewNode(carTree);
+    addNewNode(carTree);
 
-    Tree tree = createCarTree();
-    addNewNode(tree);
-     addNewNode(tree);
-     addNewNode(tree);
+    addNewNode(supplierTree);
+    addNewNode(supplierTree);
+    addNewNode(supplierTree);
 
-
+    printTree(supplierTree->root,printSupplierNode);
     check_for_exit();
-    treeClear(tree, tree->root);
+    freeTree(carTree);
+    freeTree(supplierTree);
     check_for_exit();
-
-
-
-
-    /*
-    clientBST *clientTree;
-    carBST * carTree;
-    supplierBST * supplierTree;
-
-    carTree = createCarTree();
-    clientTree = createClientTree();
-    supplierTree = createSupplierTree();
-
-
-    menu(carTree,supplierTree,clientTree);*/
 
 
     return 0;
+}
+
+return 0;
 }
