@@ -27,7 +27,7 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
     if(tree->comp(root->data, newData) == 0){
         return NULL;
     }
-    if(tree->comp(root->data, newData)<0){
+    if(tree->comp(root->data, newData)>0){
         root->left = appendNodeToTree(tree, root->left, newData);
     }
     else{
@@ -88,7 +88,7 @@ void printTree(Node node, void (*printFunc)(Node)){
 void freeNode(Tree tree, Node node){
     tree->fre(node->data);
     FREE(node);
-}
+    }
 
 void freeAllNodes(Tree tree, Node node){
     if (!node){

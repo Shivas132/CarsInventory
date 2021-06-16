@@ -26,7 +26,7 @@ Tree createSupplierTree();
 
 int addNewSupplier(Tree tree);
 
-int deleteSupplier(Tree tree);
+Node deleteSupplier(Tree tree);
 
 int deleteAllSuppliers(Tree tree);
 
@@ -38,6 +38,6 @@ void printSupplierNode(Node  node);
 
 double getPastTransactionsSum(Node node);
 
-
+void printSuppliers(Tree tree);
 
 #endif

@@ -38,7 +38,7 @@ Data setCarData();
 int addNewCar(Tree tree);
 
 /*gets license number of a car and delete it from the list. returns 1 if succeed, 0 if failed.*/
-int deleteCar(Tree tree);
+Node deleteCar(Tree tree);
 
 /*deletes all the cars from the list. returns 1 if succeed, 0 if failed.*/
 int deleteAllCars(Tree tree);

@@ -2,27 +2,30 @@
 
 
 int main(){
-        Tree carTree = createCarTree();
-        Tree supplierTree = createSupplierTree();
 
-        /*addNewNode(carTree);
-        addNewNode(carTree);
-        addNewNode(carTree);*/
+        linkedList found;
+        Tree clientTree = createClientTree();
 
-        addNewSupplier(supplierTree);
-        addNewSupplier(supplierTree);
-        addNewSupplier(supplierTree);
+        addNewClient(clientTree);
+        addNewClient(clientTree);
+        addNewClient(clientTree);
 
 
 
+        found = findClient(clientTree->root);
 
-        printTree(supplierTree->root,printSupplierNode);
-        averageOfSupplierMoney(supplierTree);
-        threeGreatestSuppliers(supplierTree);
-        check_for_exit();
-        deleteSupplier(supplierTree);
-        check_for_exit();
-        deleteAllSuppliers(supplierTree);
+        printClientList(found->head);
+            freeList(found);
+
+        found = findClient(clientTree->root);
+
+        printClientList(found->head);
+            freeList(found);
+
+        printClientCarsForGivenRentDate(clientTree->root);
+        deleteClient(clientTree);
+        deleteAllClients(clientTree);
+        freeTree(clientTree);
         check_for_exit();
 
 

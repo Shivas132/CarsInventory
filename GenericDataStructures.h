@@ -33,6 +33,7 @@ struct Tree_s{
     Data (*add)();
 };
 
+void freeList(linkedList list);
 void printTree(Node node, void (*printFunc)(Node));
 int addNewNode(Tree tree);
 Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, void*), Data (*add)());

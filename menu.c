@@ -1,7 +1,7 @@
 #include "menu.h"
 #include <stdio.h>
 
-void menu(carBST * carTree , supplierBST * supplierTree, clientBST * clientTree){
+void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
     int choose,carChoose,clientChoose,supplierChoose,exitChoose;
     puts("Welcome to CarsOrganizer \n(BETA version)");
     puts("initializing data base \ncreating cars list.....\ndone!\ncreating suppliers list.....\ndone!\ncreating clients list.....\ndone!\n");
@@ -56,13 +56,10 @@ void menu(carBST * carTree , supplierBST * supplierTree, clientBST * clientTree)
                      "any other choose for return")   ;
                 fillFieldInt(&exitChoose,1,1,1);
                 if (exitChoose==1){
-                    deleteAllSuppliers(supplierTree);
-                    deleteAllClients(clientTree);
-                    deleteAllCars(carTree);
-                    FREE(supplierTree);
-                    FREE(clientTree);
-                    FREE(carTree);
-                    puts("checking for data base status....");
+                    freeTree(supplierTree);
+                    freeTree(clientTree);
+                    freeTree(carTree);
+                    puts("checking data base status....");
                     puts("cleaning cars list.....\ndone!");
                     puts("cleaning suppliers list.....\ndone!");
                     puts("cleaning clients list.....\ndone!");
@@ -75,7 +72,7 @@ void menu(carBST * carTree , supplierBST * supplierTree, clientBST * clientTree)
         }
     }
 }
-void carSwitch(int carChoose,carBST*  carTree) {
+void carSwitch(int carChoose,Tree carTree) {
     int temp;
     switch (carChoose) {
         case 1:
@@ -87,7 +84,7 @@ void carSwitch(int carChoose,carBST*  carTree) {
                 break;
             }
             temp =carTree->size;
-            carTree->root=deleteCar(carTree->root, 0,carTree);
+            carTree->root = deleteCar(carTree);
             if (carTree->size <temp) {
                 puts("car deleted from data base");
             }
@@ -121,9 +118,9 @@ void carSwitch(int carChoose,carBST*  carTree) {
 }
 
 
-void clientSwitch(int clientChoose,clientBST* clientTree,carNode* carRoot) {
+void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
     int temp = 0;
-    clientList*  found = NULL;
+    linkedList   found = NULL;
     switch (clientChoose) {
             case 1:
                 addNewClient(clientTree);
@@ -134,7 +131,7 @@ void clientSwitch(int clientChoose,clientBST* clientTree,carNode* carRoot) {
                     break;
                 }
                     temp =clientTree->size;
-                    clientTree->root=deleteClient(clientTree->root, 0,clientTree);
+                    clientTree->root=deleteClient(clientTree);
                     if (clientTree->size <temp) {
                         puts("client deleted from data base");
                     }
@@ -145,8 +142,8 @@ void clientSwitch(int clientChoose,clientBST* clientTree,carNode* carRoot) {
                 found = findClient(clientTree->root);
             if (!found->head){
                 puts("client didn't found");}
-            else printClientList(found);
-            clearClientsList(found);
+            else{printClientList(found->head);
+                 freeList(found);}
                 break;
             case 4:
                 printClientCarsForGivenRentDate(clientTree->root);
@@ -179,7 +176,7 @@ void clientSwitch(int clientChoose,clientBST* clientTree,carNode* carRoot) {
 
 
 
-void supplierSwitch(int supplierChoose, supplierBST* supplierTree){
+void supplierSwitch(int supplierChoose, Tree supplierTree){
     int temp;
     switch (supplierChoose) {
         case 1:
@@ -191,7 +188,7 @@ void supplierSwitch(int supplierChoose, supplierBST* supplierTree){
                 break;
             }
             temp =supplierTree->size;
-            supplierTree->root=deleteSupplier(supplierTree->root, 0,supplierTree);
+            supplierTree->root=deleteSupplier(supplierTree);
             if (supplierTree->size < temp) {
                 puts("supplier deleted from data base");
             }
@@ -199,16 +196,16 @@ void supplierSwitch(int supplierChoose, supplierBST* supplierTree){
             temp =-1;
             break;
         case 3:
-            threeGreatestSuppliers(*supplierTree);
+            threeGreatestSuppliers(supplierTree);
             break;
         case 4:
-            printf("average sum of deals with suppliers is %f: ",averageOfSupplierMoney(supplierTree->root,supplierTree->size));
+            averageOfSupplierMoney(supplierTree);
             break;
         case 5:
             if (!supplierTree->root){
                 puts("supplier tree is empty");
             }
-            printSuppliers(supplierTree->root);
+            printSuppliers(supplierTree);
             break;
         case 0:
             puts("Are you sure?\n"

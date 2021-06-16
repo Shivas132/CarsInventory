@@ -90,8 +90,8 @@ int carCopy(Node dest, Data source){
     return 1;
 }
 
-double carCompare(void * license1,void * license2){
-    return *(double*)license1-*(double*)license2;
+double carCompare(void * car1,void * car2){
+    return ((Car *)car1)->licenseNum-((Car *)car2)->licenseNum;
 }
 
 /*allocating new binary search tree pointer. sets values to 0.*/
@@ -99,20 +99,22 @@ Tree createCarTree(){
     return treeCreate(carCopy, freeCar, carCompare, setCarData);
 }
 
-int deleteCar(Tree tree){
-    double* userInput = 0;
+Node deleteCar(Tree tree){
+    double userInput = 0;
 
     /*gets input from user*/
     puts("please enter license num for the car you wish to delete:");
-    fillFieldDouble(userInput, 7, 1);
+    fillFieldDouble(&userInput, 7, 1);
 
-    deleteNode(tree, tree->root, userInput);
-    return 1;
+    return deleteNode(tree, tree->root, &userInput);
 }
 
 int deleteAllCars(Tree tree){
     freeAllNodes(tree, tree->root);
     tree->size = 0;
+    tree->root = NULL;
+    puts("deleting all cars......\n"
+         "all cars deleted!");
     return 1;
 }
 

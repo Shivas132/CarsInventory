@@ -45,13 +45,12 @@ clientNode * appendClientToTree(clientNode * tree, Client newClient,clientBST* c
 
 
 /*gets id number of a client and delete it from the list. returns the tree's root.*/
-int deleteClient(Tree tree);
+Node deleteClient(Tree tree);
 
 /*deletes all the clients from the tree. returns 1.*/
 int deleteAllClients(Tree tree);
 
-void printClientCarsForGivenRentDate(clientNode * tree);
-
+void printClientCarsForGivenRentDate(Node node);
 int clearClientsList(clientList* list);
 
 linkedList findClient(Node root);

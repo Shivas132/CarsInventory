@@ -63,31 +63,23 @@ int supplierCopy(Node dest, Data source){
     return 1;
 }
 
-double supplierCompare(void * id1,void * id2){
-    return *(double*)id1-*(double*)id2;
+double supplierCompare(void * supplier1,void * supplier2) {
+    return ((Supplier *) supplier1)->id - ((Supplier *) supplier2)->id;
 }
-
 /*allocating new binary search tree pointer. sets values to 0.*/
 Tree createSupplierTree(){
     return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
 }
 
-int deleteSupplier(Tree tree){
-    double* userInput = 0;
+Node deleteSupplier(Tree tree){
+    double userInput=0;
 
     /*gets input from user*/
     puts("please enter id for the supplier you wish to delete:");
-    fillFieldDouble(userInput, 10, 1);
-
-    deleteNode(tree, tree->root, userInput);
-    return 1;
+    fillFieldDouble(&userInput, 10, 1);
+    return deleteNode(tree, tree->root, &userInput);
 }
 
-int deleteAllSuppliers(Tree tree){
-    freeAllNodes(tree, tree->root);
-    tree->size = 0;
-    return 1;
-}
 
 
 /*bubble sorting the current list of three greatest suppliers.*/
@@ -108,10 +100,12 @@ void threeGreatestSupplierBubble(Supplier*  greatest){
 /*help function for threeGreatestSuppliers.
  *adds supplier to the array if it's in the current three greatest.*/
 void addToGreatest(Supplier* greatest,Node node){
-    Supplier currSupplier = *((Supplier*)node);
+    Supplier currSupplier;
     if (!node){
         return;
     }
+    currSupplier = *((Supplier*)node->data);
+
     if (currSupplier.pastTransactionsSum>greatest[0].pastTransactionsSum){
         greatest[0]=currSupplier;
         /*keeps the array sorted every call.*/
@@ -140,7 +134,7 @@ int threeGreatestSuppliers(Tree tree){
 
 /*print the average of past transactions sum of all suppliers in tree.*/
 void averageOfSupplierMoney(Tree supplierTree) {
-        printf("%f",averageTree(supplierTree,supplierTree->root,getPastTransactionsSum));
+        printf("average sum of deals with all suppliers is\n %.2f\n",averageTree(supplierTree,supplierTree->root,getPastTransactionsSum));
 }
 
 
@@ -154,9 +148,21 @@ void printSupplierNode(Node  node){
 
 }
 
-double getPastTransactionsSum(Node node){
 
+double getPastTransactionsSum(Node node){
     return ((Supplier*)node->data)->pastTransactionsSum;
 }
 
+void printSuppliers(Tree tree){
+    printTree(tree->root,printSupplierNode);
+}
+
+int deleteAllSuppliers(Tree tree){
+    freeAllNodes(tree, tree->root);
+    tree->size = 0;
+    tree->root = NULL;
+    puts("deleting all suppliers......\n"
+         "all suppliers deleted!");
+    return 1;
+}
 
