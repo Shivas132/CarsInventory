@@ -46,7 +46,7 @@ int addNewNode(Tree tree){
 
 double averageTree(Tree tree,Node node, double(*avgParam)(Node)){
     double res;
-    if (!tree){
+    if (!node){
         return 0;
     }
     res = (avgParam(node)) / tree->size;

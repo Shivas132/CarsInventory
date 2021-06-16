@@ -139,7 +139,7 @@ int threeGreatestSuppliers(Tree tree){
 
 /*print the average of past transactions sum of all suppliers in tree.*/
 void averageOfSupplierMoney(Tree supplierTree) {
-        averageTree(supplierTree,supplierTree->root,getPastTransactionsSum);
+        printf("%f",averageTree(supplierTree,supplierTree->root,getPastTransactionsSum));
 }
 
 
@@ -154,6 +154,7 @@ void printSupplierNode(Node  node){
 }
 
 double getPastTransactionsSum(Node node){
+
     return ((Supplier*)node->data)->pastTransactionsSum;
 }
 
