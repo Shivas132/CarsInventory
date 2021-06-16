@@ -1,28 +1,30 @@
 #include "menu.h"
 
+
 int main(){
+        Tree carTree = createCarTree();
+        Tree supplierTree = createSupplierTree();
 
-    Tree tree = createCarTree();
-    addNewNode(tree);
-    check_for_exit();
-    treeClear(tree, tree->root);
-    check_for_exit();
+        /*addNewNode(carTree);
+        addNewNode(carTree);
+        addNewNode(carTree);*/
 
-
-
-
-    /*
-    clientBST *clientTree;
-    carBST * carTree;
-    supplierBST * supplierTree;
-
-    carTree = createCarTree();
-    clientTree = createClientTree();
-    supplierTree = createSupplierTree();
+        addNewSupplier(supplierTree);
+        addNewSupplier(supplierTree);
+        addNewSupplier(supplierTree);
 
 
-    menu(carTree,supplierTree,clientTree);*/
 
 
-    return 0;
+        printTree(supplierTree->root,printSupplierNode);
+        averageOfSupplierMoney(supplierTree);
+        threeGreatestSuppliers(supplierTree);
+        check_for_exit();
+        deleteSupplier(supplierTree);
+        check_for_exit();
+        deleteAllSuppliers(supplierTree);
+        check_for_exit();
+
+
+        return 0;
 }

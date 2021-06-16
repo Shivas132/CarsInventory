@@ -106,50 +106,44 @@ void threeGreatestSupplierBubble(Supplier*  greatest){
 
 /*help function for threeGreatestSuppliers.
  *adds supplier to the array if it's in the current three greatest.*/
-void addToGreatest(Supplier* greatest,supplierNode* tree){
-    if (!tree){
+void addToGreatest(Supplier* greatest,Node node){
+    Supplier currSupplier = *((Supplier*)node);
+    if (!node){
         return;
     }
-    if (tree->supplier.pastTransactionsSum>greatest[0].pastTransactionsSum){
-        greatest[0]=tree->supplier;
+    if (currSupplier.pastTransactionsSum>greatest[0].pastTransactionsSum){
+        greatest[0]=currSupplier;
         /*keeps the array sorted every call.*/
         threeGreatestSupplierBubble(greatest);
     }
-    addToGreatest(greatest,tree->left);
-    addToGreatest(greatest,tree->right);
+    addToGreatest(greatest,node->left);
+    addToGreatest(greatest,node->right);
 }
 
 /*creates and prints an array, containing the id of the 3 suppliers with the highest pastTransactionsSum*/
-int threeGreatestSuppliers(supplierBST tree){
+int threeGreatestSuppliers(Tree tree){
     Supplier greatest[3];
     int i;
-    if (tree.size<3){
+    if (tree->size<3){
         puts("there are less then three suppliers in the list");
         return -1;
     }
     for (i = 0; i < 3; i++) {
         greatest[i].pastTransactionsSum=0;}
-    addToGreatest(greatest,tree.root);
+    addToGreatest(greatest,tree->root);
     puts("three greatest suppliers are:");
     for(i = 0; i < 3; i++){
         printf("%d:  %.0f\n",i+1,greatest[i].id);}
     return 1;
 }
 
-/*returns the average of past transactions sum of all suppliers in tree.*/
-double averageOfSupplierMoney(supplierNode* tree ,int n){
-    double res;
-    if (!tree){
-        return 0;
-    }
-    res =(tree->supplier.pastTransactionsSum)/n;
-    res += averageOfSupplierMoney(tree->left,n);
-    res += averageOfSupplierMoney(tree->right,n);
-    return res;
+/*print the average of past transactions sum of all suppliers in tree.*/
+void averageOfSupplierMoney(Tree supplierTree) {
+        averageTree(supplierTree,supplierTree->root,getPastTransactionsSum);
 }
 
 
-/*prints every supplier's details in the list*/
+/*prints supplier's details*/
 void printSupplierNode(Node  node){
     printf("    \nName:  %s\n",((Supplier*)node->data)->name);
     printf("    Supplier's authorized dealer number:  %0.f\n",((Supplier*)node->data)->id);
@@ -159,6 +153,8 @@ void printSupplierNode(Node  node){
 
 }
 
-double getSupplierAvgField(Node node){
+double getPastTransactionsSum(Node node){
     return ((Supplier*)node->data)->pastTransactionsSum;
 }
+
+

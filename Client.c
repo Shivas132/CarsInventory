@@ -144,113 +144,44 @@ void printClientCarsForGivenRentDate(clientNode * tree) {
 
 /*---------------------findClient functions---------------------*/
 
-/*copying data to new node.*/
-int copyClient_list(nodeList dest, Client source){
-    Client* clientData = ((Client*)dest->data);
-
-    clientData->name = copyField(source.name);
-    clientData->surname = copyField(source.surname);
-    clientData->priceForDay = source.priceForDay;
-    clientData->id = source.id;
-    strcpy(clientData->rentDate, source.rentDate);
-    strcpy(clientData->rentHour, source.rentHour);
-    clientData->rentedCarLicense = source.rentedCarLicense;
-    return 1;
-}
-
-/*creates new list node.*/
-/*clientNode_l *createNode_l(Client client){
-    clientNode_l * new = ALLOC(clientNode_l,1);
-    new->next = NULL;
-    copyClient_list(new, client);
-    return new;
-}*/
-
-/*finds a client by binary search for given id.*/
-int findClientByID(clientNode* tree, double id, clientNode_l** head){
-
-    if(!tree){
-        return 0;
-    }
-    if(tree->client.id == id){
-        *head = createClientNode_l(tree->client);
-        return 1;
-    }
-    if(tree->client.id > id){
-        return findClientByID(tree->left , id, head);
-    }
-    return findClientByID(tree->right , id, head);
-}
-
-/*insert a node in linked list.*/
-int insertNewNode(clientNode_l** head, Client client){
-    clientNode_l *newNode = NULL, *curr;
-
-    /*initializing new node. */
-    newNode = createClientNode_l(client);
-
-    /*true when list is empty, or client's id is smaller then first node's*/
-    if ((*head == NULL) || (*head)->client.id >= client.id) {
-        newNode->next = *head;
-        *head = newNode;
-        return 1;
-    }
-
-    /*finds the first bigger client id*/
-    curr = *head;
-    while ((curr->next) && (curr->next->client.id < newNode->client.id)) {
-        curr = curr->next;
-    }
-
-    /*inserting the new node after the current one.*/
-    newNode->next = curr->next;
-    curr->next = newNode;
-    return 1;
-}
-
-/*finds client and insert them to a linked list.*/
-int findClientByRentDate(clientNode* tree, const char* date, clientNode_l** head){
-    if(!tree){
-        return 0;
-    }
-    if(strcmp(tree->client.rentDate, date) == 0) {
-        insertNewNode(head, tree->client);
-    }
-    findClientByRentDate(tree->left, date, head);
-    findClientByRentDate(tree->right, date, head);
-    return 1;
+double dateCompare(void* date1, void* date2){
+    return strcmp((char*)(date1), (char*)(date2));
 }
 
 /*gets searching parameter, and input from user.
  * returns all clients that*/
-clientList* findClient(clientNode* tree){
-    clientList *clients;
+linkedList findClient(Node root){
+    linkedList clients;
     int userChoice;
     double idInput;
     char dateInput[11];
 
-    if(!tree){
+    if(!root){
         return NULL;
     }
 
-    clients = ALLOC(clientList,1);
+    clients = ALLOC(struct linkedList,1);
     clients->head = NULL;
+    clients->fre = &freeClient;
 
     puts("how would you like to search for client?\n"
          "\t 1. by ID."
          "\t2. by rent date."
          "\tany other number to exit.");
+
     fillFieldInt(&userChoice,1,1,1);
     switch (userChoice) {
         case 1:
             puts("please enter a client's ID to search: ");
             fillFieldDouble(&idInput, 9, 1);
-            findClientByID(tree, idInput, (&clients->head));
+            clients->comp = &clientCompare;
+            findNode(root, &idInput, clients, &(clients->head));
             break;
         case 2:
             puts("please enter a rent date to search: ");
             fillFieldStr(dateInput, 10, 3,1);
-            findClientByRentDate(tree, dateInput, (&clients->head));
+            findNode(root, dateInput, clients, &(clients->head));
+            clients->comp = &dateCompare;
             break;
         default:
             return NULL;
@@ -258,30 +189,16 @@ clientList* findClient(clientNode* tree){
     return clients;
 }
 
-/*free allocated memory of linked list*/
-int clearClientsList(clientList* list){
-    clientNode_l * temp;
-
-    while (list->head){
-        temp = list->head->next;
-        FREE(list->head->client.name);
-        FREE(list->head->client.surname);
-        FREE(list->head);
-        list->head = temp;
-    }
-    FREE(list);
-    return 1;
-}
 
 /*prints clients names in liked list*/
-void printClientList(clientList* list){
-    clientNode_l * temp;
-    if (!list){
+void printClientList(nodeList node){
+    nodeList temp;
+    if (!node){
         return;
     }
-    temp=list->head;
+    temp = node;
     while (temp){
-        printf("client name: %s %s\n",temp->client.name,temp->client.surname);
+        printf("client name: %s %s\n",((Client *)temp->data)->name,((Client *)temp->data)->surname);
         temp=temp->next;
     }
 }
