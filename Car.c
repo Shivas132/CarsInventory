@@ -99,14 +99,24 @@ Tree createCarTree(){
     return treeCreate(carCopy, freeCar, carCompare, setCarData);
 }
 
-Node deleteCar(Tree tree){
+void deleteCar(Tree tree){
     double userInput = 0;
+    int temp =0;
 
+    if (!tree->root) {
+        puts("car tree is empty");
+        return;
+    }
     /*gets input from user*/
     puts("please enter license num for the car you wish to delete:");
     fillFieldDouble(&userInput, 7, 1);
 
-    return deleteNode(tree, tree->root, &userInput);
+    temp =tree->size;
+    tree->root= deleteNode(tree, tree->root, &userInput);
+    if (tree->size < temp) {
+        puts("car deleted from data base");
+    }
+    else puts("couldn't find car's id ");
 }
 
 int deleteAllCars(Tree tree){
@@ -146,6 +156,19 @@ int carNumberWithGivenCapacity(Node root, int cap){
     res += carNumberWithGivenCapacity(root->left, userInput);
     res += carNumberWithGivenCapacity(root->right, userInput);
     return res;
+}
+
+void printCarData(Data data){
+    printf("    \nLicense number:  %f\n",((Car*)data)->licenseNum);
+    printf("    Chassis number:  %s\n",((Car*)data)->chassisNum);
+    printf("    Manufacturer:  %s\n",((Car*)data)->manufacturer);
+    printf("    Model: %s\n",((Car*)data)->model);
+    printf("    Engine's capacity: %d\n",((Car*)data)->velocity);
+    printf("    Color: %s\n",((Car*)data)->color);
+    printf("    Manufacturing year: %d\n",((Car*)data)->manufactorYear);
+    printf("    On the road since: %d\n",((Car*)data)->onRoadSince);
+    printf("    Car's price from the supplier was: %f\n",((Car*)data)->priceFromSupplier);
+    printf("    Car's current price is: %f\n",((Car*)data)->currentPrice);
 }
 
 

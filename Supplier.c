@@ -71,13 +71,24 @@ Tree createSupplierTree(){
     return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
 }
 
-Node deleteSupplier(Tree tree){
-    double userInput=0;
+void deleteSupplier(Tree tree){
+    double userInput = 0;
+    int temp =0;
 
+    if (!tree->root) {
+        puts("supplier tree is empty");
+        return;
+    }
     /*gets input from user*/
     puts("please enter id for the supplier you wish to delete:");
-    fillFieldDouble(&userInput, 10, 1);
-    return deleteNode(tree, tree->root, &userInput);
+    fillFieldDouble(&userInput, 7, 1);
+
+    temp =tree->size;
+    tree->root= deleteNode(tree, tree->root, &userInput);
+    if (tree->size < temp) {
+        puts("supplier deleted from data base");
+    }
+    else puts("couldn't find supplier's id ");
 }
 
 
@@ -139,22 +150,20 @@ void averageOfSupplierMoney(Tree supplierTree) {
 
 
 /*prints supplier's details*/
-void printSupplierNode(Node  node){
-    printf("    \nName:  %s\n",((Supplier*)node->data)->name);
-    printf("    Supplier's authorized dealer number:  %0.f\n",((Supplier*)node->data)->id);
-    printf("    Phone number:  %s\n",((Supplier*)node->data)->phoneNumber);
-    printf("    Number of past transaction with supplier  :%0.f\n",((Supplier*)node->data)->pastTransactionsNumber);
-    printf("    Sum of past transaction with supplier  :%0.f\n",((Supplier*)node->data)->pastTransactionsSum);
-
+void printSupplierData(Data data){
+    printf("    \nName:  %s\n",((Supplier*)data)->name);
+    printf("    Supplier's authorized dealer number:  %0.f\n",((Supplier*)data)->id);
+    printf("    Phone number:  %s\n",((Supplier*)data)->phoneNumber);
+    printf("    Number of past transaction with supplier  :%0.f\n",((Supplier*)data)->pastTransactionsNumber);
+    printf("    Sum of past transaction with supplier  :%0.f\n",((Supplier*)data)->pastTransactionsSum);
 }
-
 
 double getPastTransactionsSum(Node node){
     return ((Supplier*)node->data)->pastTransactionsSum;
 }
 
 void printSuppliers(Tree tree){
-    printTree(tree->root,printSupplierNode);
+    printTree(tree->root, printSupplierData);
 }
 
 int deleteAllSuppliers(Tree tree){
