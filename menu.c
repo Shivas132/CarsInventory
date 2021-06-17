@@ -4,7 +4,7 @@
 void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
     int choose,carChoose,clientChoose,supplierChoose,exitChoose;
     puts("Welcome to CarsOrganizer \n(BETA version)");
-    puts("initializing data base \ncreating cars list.....\ndone!\ncreating suppliers list.....\ndone!\ncreating clients list.....\ndone!\n");
+    puts("initializing data base \ncreating cars tree.....\tdone!\tcreating suppliers tree.....\tdone!\tcreating clients tree.....\tdone!\n");
     while(1){
         puts("\nplease enter your choose:\n"
              "      1.Cars menu\n"
@@ -19,6 +19,7 @@ void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
                      "      1.add new car\n"
                      "      2.delete Car\n"
                      "      3.get how many cars there are with given engine velocity\n"
+                     "      4.generate an array made of the tree and print it\n"
                      "      0.delete all cars\n"
                      "      any other digit to return\n");
                 fillFieldInt(&carChoose,1,1,1);
@@ -32,6 +33,7 @@ void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
                      "      3.find client\n"
                      "      4.print all clients with given rent date\n"
                      "      5.get how many client's there are with car from given car year\n"
+                     "      6.generate an array made of the tree and print it\n"
                      "      0.delete all clients\n"
                      "      any other digit to return\n");
                 fillFieldInt(&clientChoose,1,1,1);
@@ -45,11 +47,13 @@ void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
                      "      3.get ID number of the top 3 suppliers\n"
                      "      4.average sum of deals with suppliers\n"
                      "      5.print all suppliers details\n"
+                     "      6.generate an array made of the tree and print it\n"
                      "      0.delete all suppliers\n"
                      "      any other digit to return\n");
                 fillFieldInt(&supplierChoose,1,1,1);
                 supplierSwitch(supplierChoose, supplierTree);
                 break;
+
             case 0:
                 puts("Are you sure?\n"
                      "1.yes\n"
@@ -73,23 +77,14 @@ void menu(Tree  carTree , Tree supplierTree, Tree clientTree){
     }
 }
 void carSwitch(int carChoose,Tree carTree) {
+    Data * arr;
     int temp;
     switch (carChoose) {
         case 1:
             addNewCar(carTree);
             break;
         case 2:
-            if (!carTree->root){
-                puts("car tree is empty");
-                break;
-            }
-            temp =carTree->size;
-            carTree->root = deleteCar(carTree);
-            if (carTree->size <temp) {
-                puts("car deleted from data base");
-            }
-            else puts("couldn't find license num ");
-            temp =-1;
+            deleteCar(carTree);
             break;
         case 3:
             temp = carNumberWithGivenCapacity(carTree->root,0);
@@ -100,10 +95,18 @@ void carSwitch(int carChoose,Tree carTree) {
                 puts("there are no cars with given capacity");
             temp=-1;
             break;
+        case 4:
+            if (carTree->size>0) {
+                arr = treeToArray(carTree);
+                printArray(arr, printCarData);
+                FREE(arr);
+            }
+            else puts("tree is empty");
+            break;
         case 0:
             puts("Are you sure?\n"
                  "1.yes\n"
-                 "any other choose for return")   ;
+                 "any other choose for return");
             fillFieldInt(&temp,1,1,1);
             if (temp==1) {
                 deleteAllCars(carTree);
@@ -119,6 +122,7 @@ void carSwitch(int carChoose,Tree carTree) {
 
 
 void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
+    Data* arr;
     int temp = 0;
     linkedList   found = NULL;
     switch (clientChoose) {
@@ -126,17 +130,7 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
                 addNewClient(clientTree);
                 break;
             case 2:
-                if (!clientTree->root) {
-                    puts("car tree is empty");
-                    break;
-                }
-                    temp =clientTree->size;
-                    clientTree->root=deleteClient(clientTree);
-                    if (clientTree->size <temp) {
-                        puts("client deleted from data base");
-                    }
-                    else puts("couldn't find ID");
-                    temp =-1;
+                deleteClient(clientTree);
                     break;
             case 3:
                 found = findClient(clientTree->root);
@@ -157,7 +151,15 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
                 }
                 temp = -1;
                 break;
-        case 0:
+           case 6:
+               if (clientTree->size>0) {
+                   arr = treeToArray(clientTree);
+                   printArray(arr, printClientData);
+                   FREE(arr);
+               }
+                else puts("tree is empty");
+                break;
+                case 0:
             puts("Are you sure?\n"
                  "1.yes\n"
                  "any other choose for return");
@@ -178,22 +180,13 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
 
 void supplierSwitch(int supplierChoose, Tree supplierTree){
     int temp;
+    Data * arr;
     switch (supplierChoose) {
         case 1:
             addNewSupplier(supplierTree);
             break;
         case 2:
-            if (!supplierTree->root) {
-                puts("supplier tree is empty");
-                break;
-            }
-            temp =supplierTree->size;
-            supplierTree->root=deleteSupplier(supplierTree);
-            if (supplierTree->size < temp) {
-                puts("supplier deleted from data base");
-            }
-            else puts("couldn't find supplier's id ");
-            temp =-1;
+            deleteSupplier(supplierTree);
             break;
         case 3:
             threeGreatestSuppliers(supplierTree);
@@ -206,6 +199,14 @@ void supplierSwitch(int supplierChoose, Tree supplierTree){
                 puts("supplier tree is empty");
             }
             printSuppliers(supplierTree);
+            break;
+        case 6:
+            if (supplierTree->size>0) {
+                arr = treeToArray(supplierTree);
+                printArray(arr, printSupplierData);
+                FREE(arr);
+            }
+            else puts("tree is empty");
             break;
         case 0:
             puts("Are you sure?\n"

@@ -63,8 +63,8 @@ int addToArray(Node node, Data* arr, int idx){
     if(node->left){
         idx = addToArray(node->left, arr, idx);
     }
-    idx+=1;
     arr[idx] = node->data;
+    idx+=1;
     if(node->right){
         addToArray(node->right, arr, idx);
     }
@@ -77,11 +77,18 @@ Data* treeToArray(Tree tree){
     return dataArr;
 }
 
-void printTree(Node node, void (*printFunc)(Node)){
+void printArray(Data* arr, void (*printFunc)(Data)){
+    while(*arr){
+        printFunc(*arr);
+        arr++;
+    }
+}
+
+void printTree(Node node, void (*printFunc)(Data)){
     if(!node) return;
 
     printTree(node->left,printFunc);
-    printFunc(node);
+    printFunc(node->data);
     printTree(node->right,printFunc);
 }
 
@@ -226,17 +233,19 @@ int insertNewNode(nodeList * head, Data data, double (*comp)(void*, void*)){
 
 /*linked list has created outside of the function*/
 int findNode(Node node, Data findBy, linkedList list, nodeList* head){
+    int res=0;
     if(!node){
         return 0;
     }
-    findNode(node->left, findBy, list, head);
+    res += findNode(node->left, findBy, list, head);
 
     if(list->comp(node->data, findBy) == 0) {
         insertNewNode(head, node->data, list->comp);
+        res++;
     }
-    findNode(node->right, findBy, list, head);
+    res+= findNode(node->right, findBy, list, head);
+    return res;
 
-    return 1;
 }
 
 

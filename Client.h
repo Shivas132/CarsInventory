@@ -40,21 +40,22 @@ Tree createClientTree();
 /*adds new client to the client to clientTree. return 1 if succeed, 0 if failed*/
 int addNewClient(Tree tree);
 
-/*help function to call in addNewClient*/
-clientNode * appendClientToTree(clientNode * tree, Client newClient,clientBST* clientBst);
-
-
 /*gets id number of a client and delete it from the list. returns the tree's root.*/
-Node deleteClient(Tree tree);
+void deleteClient(Tree tree);
 
 /*deletes all the clients from the tree. returns 1.*/
 int deleteAllClients(Tree tree);
 
 void printClientCarsForGivenRentDate(Node node);
+
 int clearClientsList(clientList* list);
+
+void printClientData(Data data);
 
 linkedList findClient(Node root);
 
 void printClientList(nodeList node);
+
+void printClientData(Data data);
 
 #endif

@@ -38,7 +38,7 @@ Data setCarData();
 int addNewCar(Tree tree);
 
 /*gets license number of a car and delete it from the list. returns 1 if succeed, 0 if failed.*/
-Node deleteCar(Tree tree);
+void deleteCar(Tree tree);
 
 /*deletes all the cars from the list. returns 1 if succeed, 0 if failed.*/
 int deleteAllCars(Tree tree);
@@ -47,8 +47,12 @@ int deleteAllCars(Tree tree);
 int carNumberWithGivenCapacity(Node root, int cap);
 
 double carCompare(void * license1,void * license2);
+
 int carCopy(Node dest, Data source);
+
 void freeCar(Data data);
+
+void printCarData(Data data);
 
 
 #endif
