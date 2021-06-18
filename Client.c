@@ -74,8 +74,8 @@ int clientCopy(Node dest, Data source){
     return 1;
 }
 
-double clientCompare(void * id1,void * id2){ /*TODO maybe generic?*/
-    return *(double*)id1-*(double*)id2;
+double clientCompare(void * client1,void * client2){ /*TODO maybe generic?*/
+    return ((Client *)client1)->id-((Client *)client2)->id;
 }
 
 /*allocating new binary search tree pointer. sets values to 0.*/
@@ -101,45 +101,32 @@ int deleteAllClients(Tree tree){
 }
 
 
-
-/*recursive function. every call it compares client's rent date and prints it's name if true.
- * returns flag to indicate if any client found.*/
-int printClientCarsForGivenRentDate_rec(clientNode* tree, char* userInput){
-    int flag = 0;
-
-    /*base case - empty pointer*/
-    if (!tree) {
-        return 0;
-    }
-
-    /*prints client's name and surname*/
-    if (strcmp(userInput, tree->client.rentDate) == 0) {
-        printf("\t%s %s\n", tree->client.name, tree->client.surname);
-        flag =1;
-    }
-
-    /*goes to tree's children*/
-    flag += printClientCarsForGivenRentDate_rec(tree->left, userInput);
-    flag += printClientCarsForGivenRentDate_rec(tree->right, userInput);
-    return flag;
-}
-
-
 /*gets rent date from user, prints name and surname of clients that rented a car in this date.*/
-void printClientCarsForGivenRentDate(clientNode * tree) {
-
+void printClientCarsForGivenRentDate(Node node) {
+    linkedList clients;
     char userInput[11];
     int flag;
+    if(!node){
+        return;
+    }
+
+    clients = ALLOC(struct linkedList,1);
+    clients->head = NULL;
+    clients->fre = &freeClient;
 
     /*gets input from user*/
     puts("please enter a rent date to check: ");
     fillFieldStr(userInput, 10, 3, 1);
 
     printf("clients who rented a car at %s:\n", userInput);
-    flag = printClientCarsForGivenRentDate_rec(tree, userInput);
+    flag = findNode(node, userInput, clients, &(clients->head));
     if (!flag) {
         puts("\n\tno clients found...");
     }
+    else{
+        printClientList(clients->head);
+    }
+    freeList(clients);
 }
 
 
