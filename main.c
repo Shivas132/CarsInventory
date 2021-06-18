@@ -2,28 +2,13 @@
 
 
 int main(){
+
         Tree carTree = createCarTree();
         Tree supplierTree = createSupplierTree();
-
-        /*addNewNode(carTree);
-        addNewNode(carTree);
-        addNewNode(carTree);*/
-
-        addNewSupplier(supplierTree);
-        addNewSupplier(supplierTree);
-        addNewSupplier(supplierTree);
+        Tree clientTree = createClientTree();
 
 
-
-
-        printTree(supplierTree->root,printSupplierNode);
-        averageOfSupplierMoney(supplierTree);
-        threeGreatestSuppliers(supplierTree);
-        check_for_exit();
-        deleteSupplier(supplierTree);
-        check_for_exit();
-        deleteAllSuppliers(supplierTree);
-        check_for_exit();
+        menu(carTree,supplierTree,clientTree);
 
 
         return 0;

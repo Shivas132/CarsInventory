@@ -26,7 +26,7 @@ Tree createSupplierTree();
 
 int addNewSupplier(Tree tree);
 
-int deleteSupplier(Tree tree);
+void deleteSupplier(Tree tree);
 
 int deleteAllSuppliers(Tree tree);
 
@@ -34,10 +34,10 @@ void averageOfSupplierMoney(Tree supplierTree);
 
 int threeGreatestSuppliers(Tree tree);
 
-void printSupplierNode(Node  node);
+void printSupplierData(Data data);
 
 double getPastTransactionsSum(Node node);
 
-
+void printSuppliers(Tree tree);
 
 #endif

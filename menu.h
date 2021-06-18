@@ -3,11 +3,11 @@
 #ifndef HW3_MENU_H
 #define HW3_MENU_H
 
-void menu(carBST * carTree , supplierBST * supplierTree, clientBST * clientTree);
+void menu(Tree  carTree , Tree supplierTree, Tree clientTree);
 
 /*helpers for menu*/
-void carSwitch(int carChoose,carBST * carTree);
-void clientSwitch(int clientChoose, clientBST * clientTree,carNode* carRoot);
-void supplierSwitch(int supplierChoose,supplierBST * supplierTree);
+void carSwitch(int carChoose,Tree carTree);
+void clientSwitch(int clientChoose,Tree clientTree,Node carRoot);
+void supplierSwitch(int supplierChoose, Tree supplierTree);
 
 #endif

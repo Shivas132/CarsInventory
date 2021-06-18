@@ -145,7 +145,7 @@ void averageOfSupplierMoney(Tree supplierTree) {
 
 
 /*prints supplier's details*/
-void printSupplierNode(Node node){
+void printSupplierNode(Node  node){
     printf("    \nName:  %s\n",((Supplier*)node->data)->name);
     printf("    Supplier's authorized dealer number:  %0.f\n",((Supplier*)node->data)->id);
     printf("    Phone number:  %s\n",((Supplier*)node->data)->phoneNumber);
