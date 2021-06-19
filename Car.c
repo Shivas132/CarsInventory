@@ -91,7 +91,12 @@ int carCopy(Node dest, Data source){
 }
 
 double carCompare(void * car1,void * car2){
+    printf("1 %0.f   2 %0.f",((Car *)car1)->licenseNum,(((Car *)car2)->licenseNum));/*TODO delete*/
     return ((Car *)car1)->licenseNum-((Car *)car2)->licenseNum;
+}
+
+double LicenseCompare(Data car, void* license){
+    return ((Car*)(car))->licenseNum- *((double*)license);
 }
 
 /*allocating new binary search tree pointer. sets values to 0.*/
@@ -108,11 +113,11 @@ void deleteCar(Tree tree){
         return;
     }
     /*gets input from user*/
-    puts("please enter license num for the car you wish to delete:");
+    puts("please enter license num for the car you wish to delete (7 digits):");
     fillFieldDouble(&userInput, 7, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, &userInput);
+    tree->root= deleteNode(tree, tree->root, &userInput, &LicenseCompare);
     if (tree->size < temp) {
         puts("car deleted from data base");
     }
@@ -159,7 +164,7 @@ int carNumberWithGivenCapacity(Node root, int cap){
 }
 
 void printCarData(Data data){
-    printf("    \nLicense number:  %f\n",((Car*)data)->licenseNum);
+    printf("    \nLicense number:  %.0f\n",((Car*)data)->licenseNum);
     printf("    Chassis number:  %s\n",((Car*)data)->chassisNum);
     printf("    Manufacturer:  %s\n",((Car*)data)->manufacturer);
     printf("    Model: %s\n",((Car*)data)->model);
@@ -167,8 +172,8 @@ void printCarData(Data data){
     printf("    Color: %s\n",((Car*)data)->color);
     printf("    Manufacturing year: %d\n",((Car*)data)->manufactorYear);
     printf("    On the road since: %d\n",((Car*)data)->onRoadSince);
-    printf("    Car's price from the supplier was: %f\n",((Car*)data)->priceFromSupplier);
-    printf("    Car's current price is: %f\n",((Car*)data)->currentPrice);
+    printf("    Car's price from the supplier was: %.0f\n",((Car*)data)->priceFromSupplier);
+    printf("    Car's current price is: %.0f\n",((Car*)data)->currentPrice);
 }
 
 

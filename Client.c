@@ -51,10 +51,13 @@ Data setClientData(){
 double dateCompare(void* client, void* date){
     return strcmp(((Client*)(client))->rentDate, (char*)date);
 }
-double idCompare(void* client, void* id){
-    return ((Client*)(client))->id- *((double *)id);
+
+double clientsIdCompare(Data client, void* id){
+    return ((Client*)(client))->id- *((double*)id);
 }
-double addToTreeClientCompare(void * client1, void * client2){
+
+
+double clientCompare(void * client1, void * client2){
     return ((Client *)client1)->id-((Client *)client2)->id;
 }
 
@@ -144,7 +147,7 @@ linkedList findClient(Node root){
         case 1:
             puts("please enter a client's ID to search: ");
             fillFieldDouble(&idInput, 9, 1);
-            clients->comp = &idCompare;
+            clients->comp = &clientsIdCompare;
             findNode(root, &idInput, clients, &(clients->head));
             break;
         case 2:
@@ -181,7 +184,7 @@ int addNewClient(Tree tree){
 
 /*allocating new binary search tree pointer. sets values to 0.*/
 Tree createClientTree(){
-    return treeCreate(clientCopy, freeClient, addToTreeClientCompare, setClientData);
+    return treeCreate(clientCopy, freeClient, clientCompare, setClientData);
 }
 
 void deleteClient(Tree tree){
@@ -193,11 +196,11 @@ void deleteClient(Tree tree){
         return;
     }
     /*gets input from user*/
-    puts("please enter id for the client you wish to delete:");
-    fillFieldDouble(&userInput, 7, 1);
+    puts("please enter id for the client you wish to delete (9 digits):");
+    fillFieldDouble(&userInput, 9, 1);
 
-    temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, &userInput);
+    temp = tree->size;
+    tree->root= deleteNode(tree, tree->root, &userInput,clientsIdCompare);
     if (tree->size < temp) {
         puts("client deleted from data base");
     }
@@ -222,9 +225,3 @@ void printClientData(Data data){
     printf("    renting hour:  %s\n",((Client *)data)->rentHour);
     printf("    price per day :%0.f\n",((Client *)data)->priceForDay);
 }
-
-
-
-
-
-

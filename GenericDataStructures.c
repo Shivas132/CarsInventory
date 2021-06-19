@@ -77,10 +77,10 @@ Data* treeToArray(Tree tree){
     return dataArr;
 }
 
-void printArray(Data* arr, void (*printFunc)(Data)){
-    while(*arr){
-        printFunc(*arr);
-        arr++;
+void printArray(Data* arr, void (*printFunc)(Data),int size){
+    int i;
+    for (i=0;i<size;i++){
+        printFunc(arr[i]);
     }
 }
 
@@ -111,22 +111,22 @@ void freeTree(Tree tree){
     FREE(tree);
 }
 
-Node deleteNode(Tree tree, Node node, Data deletedData){
+Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, void*)){
     Node temp, follower, *followerAddr;
 
     if (!node) {
         return NULL;
     }
 
-    /* searching wanted supplier in node's children*/
-    if(tree->comp(node->data, deletedData) != 0) {
+    /* searching wanted node in node's children*/
+    if(comp(node->data, deletedData) != 0) {
         /* Go left*/
-        if(tree->comp(node->data, deletedData) < 0) {
-            node->left = deleteNode(tree, node->left, deletedData);
+        if(comp(node->data, deletedData) < 0) {
+            node->left = deleteNode(tree, node->left, deletedData, comp);
         }
             /* Go right*/
         else {
-            node->right = deleteNode(tree, node->right, deletedData);
+            node->right = deleteNode(tree, node->right, deletedData, comp);
         }
 
     }
@@ -161,7 +161,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
             }
             freeNode(tree, node);
             tree->cpy(node, follower->data);
-            *followerAddr = deleteNode(tree, follower, follower->data);
+            *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
         }
     }
     return node;

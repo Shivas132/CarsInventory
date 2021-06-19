@@ -66,6 +66,11 @@ int supplierCopy(Node dest, Data source){
 double supplierCompare(void * supplier1,void * supplier2) {
     return ((Supplier *) supplier1)->id - ((Supplier *) supplier2)->id;
 }
+
+double suppliersIdCompare(Data supplier, void* id){
+    return ((Supplier *)(supplier))->id- *((double*)id);
+}
+
 /*allocating new binary search tree pointer. sets values to 0.*/
 Tree createSupplierTree(){
     return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
@@ -80,11 +85,11 @@ void deleteSupplier(Tree tree){
         return;
     }
     /*gets input from user*/
-    puts("please enter id for the supplier you wish to delete:");
-    fillFieldDouble(&userInput, 7, 1);
+    puts("please enter id for the supplier you wish to delete (10 digits):");
+    fillFieldDouble(&userInput, 10, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, &userInput);
+    tree->root= deleteNode(tree, tree->root, &userInput,suppliersIdCompare);
     if (tree->size < temp) {
         puts("supplier deleted from data base");
     }
