@@ -98,7 +98,7 @@ void carSwitch(int carChoose,Tree carTree) {
         case 4:
             if (carTree->size>0) {
                 arr = treeToArray(carTree);
-                printArray(arr, printCarData);
+                printArray(arr, printCarData,carTree->size);
                 FREE(arr);
             }
             else puts("tree is empty");
@@ -136,8 +136,10 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
                 found = findClient(clientTree->root);
             if (!found->head){
                 puts("client didn't found");}
-            else{printClientList(found->head);
-                 freeList(found);}
+            else {
+                printClientList(found->head);
+            }
+                 freeList(found);
                 break;
             case 4:
                 printClientCarsForGivenRentDate(clientTree->root);
@@ -154,7 +156,7 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
            case 6:
                if (clientTree->size>0) {
                    arr = treeToArray(clientTree);
-                   printArray(arr, printClientData);
+                   printArray(arr, printClientData,clientTree->size);
                    FREE(arr);
                }
                 else puts("tree is empty");
@@ -203,7 +205,7 @@ void supplierSwitch(int supplierChoose, Tree supplierTree){
         case 6:
             if (supplierTree->size>0) {
                 arr = treeToArray(supplierTree);
-                printArray(arr, printSupplierData);
+                printArray(arr, printSupplierData,supplierTree->size);
                 FREE(arr);
             }
             else puts("tree is empty");

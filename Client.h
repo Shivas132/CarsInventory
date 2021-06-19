@@ -40,7 +40,7 @@ Tree createClientTree();
 /*adds new client to the client to clientTree. return 1 if succeed, 0 if failed*/
 int addNewClient(Tree tree);
 
-/*gets id number of a client and delete it from the list. returns the tree's root.*/
+/*gets licenseNum number of a client and delete it from the list. returns the tree's root.*/
 void deleteClient(Tree tree);
 
 /*deletes all the clients from the tree. returns 1.*/

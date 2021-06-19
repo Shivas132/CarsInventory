@@ -3,7 +3,7 @@
 #include "FillField.h"
 #include <stdio.h>
 
-/*adds new client to the head of clients list.*/
+/*get info from the user and return new client.*/
 Data setClientData(){
 
     Client* newClient;
@@ -46,17 +46,21 @@ Data setClientData(){
 
     return newClient;
 }
+/*---------------------findClient functions---------------------*/
 
-int addNewClient(Tree tree){
-    return addNewNode(tree);
+double dateCompare(void* client, void* date){
+    return strcmp(((Client*)(client))->rentDate, (char*)date);
 }
 
-/*free allocated memory*/
-void freeClient(Data data){
-    FREE(((Client*)(data))->name);
-    FREE(((Client*)(data))->surname);
-    FREE(data);
+double clientsIdCompare(Data client, void* id){
+    return ((Client*)(client))->id - (*(double*)id);
 }
+
+
+double clientCompare(void * client1, void * client2){
+    return ((Client *)client1)->id-((Client *)client2)->id;
+}
+
 
 /*copying data to destination node.
  * allocating new memory for dynamic allocated data copying.*/
@@ -74,80 +78,48 @@ int clientCopy(Node dest, Data source){
     return 1;
 }
 
-double clientCompare(void * id1,void * id2){ /*TODO maybe generic?*/
-    return *(double*)id1-*(double*)id2;
+
+
+/*free allocated memory*/
+void freeClient(Data data){
+    FREE(((Client*)(data))->name);
+    FREE(((Client*)(data))->surname);
+    FREE(data);
 }
 
-/*allocating new binary search tree pointer. sets values to 0.*/
-Tree createClientTree(){
-    return treeCreate(clientCopy, freeClient, clientCompare, setClientData);
-}
-
-int deleteClient(Tree tree){
-    double* userInput = 0;
-
-    /*gets input from user*/
-    puts("please enter id for the client you wish to delete: (9 digits)");
-    fillFieldDouble(userInput, 9, 1);
-
-    deleteNode(tree, tree->root, userInput);
-    return 1;
-}
-
-int deleteAllClients(Tree tree){
-    freeAllNodes(tree, tree->root);
-    tree->size = 0;
-    return 1;
-}
-
-
-
-/*recursive function. every call it compares client's rent date and prints it's name if true.
- * returns flag to indicate if any client found.*/
-int printClientCarsForGivenRentDate_rec(clientNode* tree, char* userInput){
-    int flag = 0;
-
-    /*base case - empty pointer*/
-    if (!tree) {
-        return 0;
-    }
-
-    /*prints client's name and surname*/
-    if (strcmp(userInput, tree->client.rentDate) == 0) {
-        printf("\t%s %s\n", tree->client.name, tree->client.surname);
-        flag =1;
-    }
-
-    /*goes to tree's children*/
-    flag += printClientCarsForGivenRentDate_rec(tree->left, userInput);
-    flag += printClientCarsForGivenRentDate_rec(tree->right, userInput);
-    return flag;
-}
 
 
 /*gets rent date from user, prints name and surname of clients that rented a car in this date.*/
-void printClientCarsForGivenRentDate(clientNode * tree) {
-
+void printClientCarsForGivenRentDate(Node node) {
+    linkedList clients;
     char userInput[11];
     int flag;
+    if(!node){
+        return;
+    }
+
+    clients = ALLOC(struct linkedList,1);
+    clients->head = NULL;
+    clients->fre = &freeClient;
+    clients->comp = dateCompare;
 
     /*gets input from user*/
     puts("please enter a rent date to check: ");
     fillFieldStr(userInput, 10, 3, 1);
 
-    printf("clients who rented a car at %s:\n", userInput);
-    flag = printClientCarsForGivenRentDate_rec(tree, userInput);
+    flag = findNode(node, userInput, clients, &(clients->head));
     if (!flag) {
         puts("\n\tno clients found...");
     }
+    else{
+        printf("clients who rented a car at %s:\n", userInput);
+        printClientList(clients->head);
+    }
+    freeList(clients);
 }
 
 
-/*---------------------findClient functions---------------------*/
 
-double dateCompare(void* date1, void* date2){
-    return strcmp((char*)(date1), (char*)(date2));
-}
 
 /*gets searching parameter, and input from user.
  * returns all clients that*/
@@ -175,14 +147,15 @@ linkedList findClient(Node root){
         case 1:
             puts("please enter a client's ID to search: ");
             fillFieldDouble(&idInput, 9, 1);
-            clients->comp = &clientCompare;
+            clients->comp = clientsIdCompare;
             findNode(root, &idInput, clients, &(clients->head));
             break;
         case 2:
             puts("please enter a rent date to search: ");
             fillFieldStr(dateInput, 10, 3,1);
-            findNode(root, dateInput, clients, &(clients->head));
             clients->comp = &dateCompare;
+            findNode(root, dateInput, clients, &(clients->head));
+
             break;
         default:
             return NULL;
@@ -204,8 +177,52 @@ void printClientList(nodeList node){
     }
 }
 
+int addNewClient(Tree tree){
+    return addNewNode(tree);
+}
 
 
+/*allocating new binary search tree pointer. sets values to 0.*/
+Tree createClientTree(){
+    return treeCreate(clientCopy, freeClient, clientCompare, setClientData);
+}
 
 
+void deleteClient(Tree tree){
+    double userInput = 0;
+    int temp =0;
 
+    if (!tree->root) {
+        puts("client tree is empty");
+        return;
+    }
+    /*gets input from user*/
+    puts("please enter licenseNum for the client you wish to delete (9 digits):");
+    fillFieldDouble(&userInput, 9, 1);
+
+    temp = tree->size;
+    tree->root= deleteNode(tree, tree->root, &userInput, clientsIdCompare);
+    if (tree->size < temp) {
+        puts("client deleted from data base");
+    }
+    else puts("couldn't find client's licenseNum ");
+}
+
+int deleteAllClients(Tree tree){
+    freeAllNodes(tree, tree->root);
+    tree->size = 0;
+    tree->root = NULL;
+    puts("deleting all clients......\n"
+         "all clients deleted!");
+    return 1;
+}
+
+void printClientData(Data data){
+    printf("    \nName:  %s\n",((Client *)data)->name);
+    printf("    Last Name:  %s\n",((Client *)data)->surname);
+    printf("    ID:  %0.f\n",((Client *)data)->id);
+    printf("    client's rented car license:  %0.f\n",((Client *)data)->rentedCarLicense);
+    printf("    renting date:  %s\n",((Client *)data)->rentDate);
+    printf("    renting hour:  %s\n",((Client *)data)->rentHour);
+    printf("    price per day: %0.f\n",((Client *)data)->priceForDay);
+}

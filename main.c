@@ -3,13 +3,14 @@
 
 int main(){
 
-        Tree carTree = createCarTree();
-        Tree supplierTree = createSupplierTree();
-        Tree clientTree = createClientTree();
+
+    Tree clientTree = createClientTree();
+    Tree carTree = createCarTree();
+    Tree supplierTree = createSupplierTree();
+
+    menu(carTree, supplierTree, clientTree);
 
 
-        menu(carTree,supplierTree,clientTree);
 
-
-        return 0;
+    return 0;
 }

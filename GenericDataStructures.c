@@ -25,7 +25,7 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
     }
 
     if(tree->comp(root->data, newData) == 0){
-        return NULL;
+        return root;
     }
     if(tree->comp(root->data, newData)>0){
         root->left = appendNodeToTree(tree, root->left, newData);
@@ -77,10 +77,10 @@ Data* treeToArray(Tree tree){
     return dataArr;
 }
 
-void printArray(Data* arr, void (*printFunc)(Data)){
-    while(*arr){
-        printFunc(*arr);
-        arr++;
+void printArray(Data* arr, void (*printFunc)(Data),int size){
+    int i;
+    for (i=0;i<size;i++){
+        printFunc(arr[i]);
     }
 }
 
@@ -111,26 +111,23 @@ void freeTree(Tree tree){
     FREE(tree);
 }
 
-Node deleteNode(Tree tree, Node node, Data deletedData){
+Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, void*)){
     Node temp, follower, *followerAddr;
-
     if (!node) {
         return NULL;
     }
 
-    /* searching wanted supplier in node's children*/
-    if(tree->comp(node->data, deletedData) != 0) {
+    /* searching wanted node in node's children*/
+    if(comp(node->data, deletedData) != 0) {
         /* Go left*/
-        if(tree->comp(node->data, deletedData) < 0) {
-            node->left = deleteNode(tree, node->left, deletedData);
+        if(comp(node->data, deletedData) > 0) {
+            node->left = deleteNode(tree, node->left, deletedData, comp);
         }
             /* Go right*/
         else {
-            node->right = deleteNode(tree, node->right, deletedData);
+            node->right = deleteNode(tree, node->right, deletedData, comp);
         }
-
     }
-
     else {
 
 /* Option 1: node is a leaf*/
@@ -161,7 +158,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
             }
             freeNode(tree, node);
             tree->cpy(node, follower->data);
-            *followerAddr = deleteNode(tree, follower, follower->data);
+            *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
         }
     }
     return node;
@@ -169,27 +166,13 @@ Node deleteNode(Tree tree, Node node, Data deletedData){
 
 /*-----------------------Linked List Functions----------------------*/
 
-linkedList listCreate(double (*comp)(void*, void*), void (*fre)(Data)) {
-
-    linkedList new_list = ALLOC(struct linkedList, 1);
-    new_list->head = NULL;
-    new_list->comp = comp;
-    new_list->fre = fre;
-    return new_list;
-}
-
-void freeListNode(linkedList list, nodeList node){
-    list->fre(node->data);
-    FREE(node);
-}
-
 void freeListNodes(linkedList list, nodeList node){
     nodeList nextOne;
     if (!node){
         return;
     }
     nextOne = node->next;
-    freeListNode(list, node);
+    FREE(node);
     freeListNodes(list, nextOne);
 }
 
