@@ -91,7 +91,6 @@ int carCopy(Node dest, Data source){
 }
 
 double carCompare(void * car1,void * car2){
-    printf("1 %0.f   2 %0.f",((Car *)car1)->licenseNum,(((Car *)car2)->licenseNum));/*TODO delete*/
     return ((Car *)car1)->licenseNum-((Car *)car2)->licenseNum;
 }
 
@@ -104,6 +103,12 @@ Tree createCarTree(){
     return treeCreate(carCopy, freeCar, carCompare, setCarData);
 }
 
+void deleteCarParam(void* userInput) {
+    /*gets input from user*/
+    puts("please enter license num for the car you wish to delete (7 digits):");
+    fillFieldDouble(userInput, 7, 1);
+}
+
 void deleteCar(Tree tree){
     double userInput = 0;
     int temp =0;
@@ -112,12 +117,9 @@ void deleteCar(Tree tree){
         puts("car tree is empty");
         return;
     }
-    /*gets input from user*/
-    puts("please enter license num for the car you wish to delete (7 digits):");
-    fillFieldDouble(&userInput, 7, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, &userInput, &LicenseCompare);
+    tree->root= deleteNode(tree, tree->root, NULL, &LicenseCompare,deleteCarParam);
     if (tree->size < temp) {
         puts("car deleted from data base");
     }

@@ -124,7 +124,7 @@ void carSwitch(int carChoose,Tree carTree) {
 void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
     Data* arr;
     int temp = 0;
-    linkedList   found = NULL;
+    linkedList found = NULL;
     switch (clientChoose) {
             case 1:
                 addNewClient(clientTree);

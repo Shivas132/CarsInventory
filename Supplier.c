@@ -76,20 +76,22 @@ Tree createSupplierTree(){
     return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
 }
 
+void deleteSupplierParam(void* userInput) {
+    /*gets input from user*/
+    puts("please enter id for the supplier you wish to delete (10 digits):");
+    fillFieldDouble(userInput, 10, 1);
+}
+
 void deleteSupplier(Tree tree){
-    double userInput = 0;
     int temp =0;
 
     if (!tree->root) {
         puts("supplier tree is empty");
         return;
     }
-    /*gets input from user*/
-    puts("please enter id for the supplier you wish to delete (10 digits):");
-    fillFieldDouble(&userInput, 10, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, &userInput,suppliersIdCompare);
+    tree->root= deleteNode(tree, tree->root,NULL,suppliersIdCompare,deleteSupplierParam);
     if (tree->size < temp) {
         puts("supplier deleted from data base");
     }

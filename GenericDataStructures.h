@@ -39,7 +39,7 @@ int addNewNode(Tree tree);
 Tree treeCreate(int (*cpy)(Node, Data),void (*fre)(Data), double (*comp)(void*, void*), Data (*add)());
 void freeTree(Tree tree);
 Node appendNodeToTree(Tree tree, Node root, Data newData);
-Node deleteNode(Tree tree, Node node, void* deletedData, double (*comp)(Data, void*));
+Node deleteNode(Tree tree, Node node, void* userInput, double (*comp)(Data, void*), void* deleteParam);
 int findNode(Node node, Data findBy, linkedList list, nodeList* head);
 double averageTree(Tree tree,Node node,double(*avgParam)(Node));
 void freeNode(Tree tree, Node node);

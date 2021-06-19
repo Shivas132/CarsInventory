@@ -25,7 +25,7 @@ Node appendNodeToTree(Tree tree, Node root, Data newData){
     }
 
     if(tree->comp(root->data, newData) == 0){
-        return NULL;
+        return root;
     }
     if(tree->comp(root->data, newData)>0){
         root->left = appendNodeToTree(tree, root->left, newData);
@@ -111,24 +111,26 @@ void freeTree(Tree tree){
     FREE(tree);
 }
 
-Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, void*)){
+Node deleteNode(Tree tree, Node node, void* userInput, double (*comp)(Data, void*), void* deleteParam){
     Node temp, follower, *followerAddr;
 
+    if (!userInput){
+        userInput=deleteParam;
+    }
     if (!node) {
         return NULL;
     }
 
     /* searching wanted node in node's children*/
-    if(comp(node->data, deletedData) != 0) {
+    if(comp(node->data, userInput) != 0) {
         /* Go left*/
-        if(comp(node->data, deletedData) < 0) {
-            node->left = deleteNode(tree, node->left, deletedData, comp);
+        if(comp(node->data, userInput) > 0) {
+            node->left = deleteNode(tree, node->left, userInput, comp, deleteParam);
         }
             /* Go right*/
         else {
-            node->right = deleteNode(tree, node->right, deletedData, comp);
+            node->right = deleteNode(tree, node->right, userInput, comp,deleteParam);
         }
-
     }
 
     else {
@@ -161,7 +163,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, voi
             }
             freeNode(tree, node);
             tree->cpy(node, follower->data);
-            *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
+            *followerAddr = deleteNode(tree, follower, userInput, comp,deleteParam);
         }
     }
     return node;
@@ -169,19 +171,6 @@ Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, voi
 
 /*-----------------------Linked List Functions----------------------*/
 
-linkedList listCreate(double (*comp)(void*, void*), void (*fre)(Data)) {
-
-    linkedList new_list = ALLOC(struct linkedList, 1);
-    new_list->head = NULL;
-    new_list->comp = comp;
-    new_list->fre = fre;
-    return new_list;
-}
-
-void freeListNode(linkedList list, nodeList node){
-    list->fre(node->data);
-    FREE(node);
-}
 
 void freeListNodes(linkedList list, nodeList node){
     nodeList nextOne;
@@ -189,7 +178,7 @@ void freeListNodes(linkedList list, nodeList node){
         return;
     }
     nextOne = node->next;
-    freeListNode(list, node);
+    FREE(node);
     freeListNodes(list, nextOne);
 }
 
