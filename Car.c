@@ -76,37 +76,31 @@ int carCopy(Node dest, Data source){
     Car* carData = ((Car*)dest->data);
     Car* carSource = ((Car*)source);
 
-    carData->manufacturer = copyField(((Car*)source)->manufacturer); /*TODO*/
-    ((Car*)(dest->data))->color = copyField(carSource->color); /*TODO*/
-    ((Car*)(dest->data))->model = copyField(((Car*)source)->model);
-    ((Car*)(dest->data))->licenseNum = ((Car*)source)->licenseNum;
-    ((Car*)(dest->data))->manufactorYear = ((Car*)source)->manufactorYear;
-    ((Car*)(dest->data))->velocity = ((Car*)source)->velocity;
-    ((Car*)(dest->data))->onRoadSince = ((Car*)source)->onRoadSince;
-    ((Car*)(dest->data))->currentPrice = ((Car*)source)->currentPrice;
-    ((Car*)(dest->data))->priceFromSupplier = ((Car*)source)->priceFromSupplier;
-    strcpy(((Car*)(dest->data))->chassisNum, ((Car*)source)->chassisNum);
+    carData->manufacturer = copyField(carSource->manufacturer);
+    carData->color = copyField(carSource->color);
+    carData->model = copyField(carSource->model);
+    carData->licenseNum = carSource->licenseNum;
+    carData->manufactorYear = carSource->manufactorYear;
+    carData->velocity = carSource->velocity;
+    carData->onRoadSince = carSource->onRoadSince;
+    carData->currentPrice = carSource->currentPrice;
+    carData->priceFromSupplier = carSource->priceFromSupplier;
+    strcpy(carData->chassisNum, carSource->chassisNum);
 
     return 1;
 }
 
 double carCompare(void * car1,void * car2){
-    return ((Car *)car1)->licenseNum-((Car *)car2)->licenseNum;
+    return ((Car *)car1)->licenseNum - ((Car *)car2)->licenseNum;
 }
 
 double LicenseCompare(Data car, void* license){
-    return ((Car*)(car))->licenseNum- *((double*)license);
+    return ((Car*)(car))->licenseNum - (*(double*)license);
 }
 
 /*allocating new binary search tree pointer. sets values to 0.*/
 Tree createCarTree(){
     return treeCreate(carCopy, freeCar, carCompare, setCarData);
-}
-
-void deleteCarParam(void* userInput) {
-    /*gets input from user*/
-    puts("please enter license num for the car you wish to delete (7 digits):");
-    fillFieldDouble(userInput, 7, 1);
 }
 
 void deleteCar(Tree tree){
@@ -117,13 +111,16 @@ void deleteCar(Tree tree){
         puts("car tree is empty");
         return;
     }
+    /*gets input from user*/
+    puts("please enter license num for the car you wish to delete (7 digits):");
+    fillFieldDouble(&userInput, 7, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root, NULL, &LicenseCompare,deleteCarParam);
+    tree->root= deleteNode(tree, tree->root, &userInput, &LicenseCompare);
     if (tree->size < temp) {
         puts("car deleted from data base");
     }
-    else puts("couldn't find car's id ");
+    else puts("couldn't find car's licenseNum ");
 }
 
 int deleteAllCars(Tree tree){

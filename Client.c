@@ -53,7 +53,7 @@ double dateCompare(void* client, void* date){
 }
 
 double clientsIdCompare(Data client, void* id){
-    return ((Client*)(client))->id- *((double*)id);
+    return ((Client*)(client))->id - (*(double*)id);
 }
 
 
@@ -119,6 +119,8 @@ void printClientCarsForGivenRentDate(Node node) {
 }
 
 
+
+
 /*gets searching parameter, and input from user.
  * returns all clients that*/
 linkedList findClient(Node root){
@@ -143,13 +145,13 @@ linkedList findClient(Node root){
     fillFieldInt(&userChoice,1,1,1);
     switch (userChoice) {
         case 1:
-            puts("please enter a client's ID to search (9 digits): ");
+            puts("please enter a client's ID to search: ");
             fillFieldDouble(&idInput, 9, 1);
-            clients->comp = &clientsIdCompare;
+            clients->comp = clientsIdCompare;
             findNode(root, &idInput, clients, &(clients->head));
             break;
         case 2:
-            puts("please enter a rent date to search (dd/mm/yyyy format only): ");
+            puts("please enter a rent date to search: ");
             fillFieldStr(dateInput, 10, 3,1);
             clients->comp = &dateCompare;
             findNode(root, dateInput, clients, &(clients->head));
@@ -185,14 +187,9 @@ Tree createClientTree(){
     return treeCreate(clientCopy, freeClient, clientCompare, setClientData);
 }
 
-void* deleteClientParam(){
-    double* userInput = ALLOC(double ,1);
-    puts("please enter id for the client you wish to delete (9 digits):");
-    fillFieldDouble(userInput, 9, 1);
-    return userInput;
-}
 
 void deleteClient(Tree tree){
+    double userInput = 0;
     int temp =0;
 
     if (!tree->root) {
@@ -200,15 +197,15 @@ void deleteClient(Tree tree){
         return;
     }
     /*gets input from user*/
-    /*puts("please enter id for the client you wish to delete (9 digits):");
-    fillFieldDouble(&userInput, 9, 1);*/
+    puts("please enter licenseNum for the client you wish to delete (9 digits):");
+    fillFieldDouble(&userInput, 9, 1);
 
     temp = tree->size;
-    tree->root = deleteNode(tree, tree->root, NULL,clientsIdCompare, deleteClientParam);
+    tree->root= deleteNode(tree, tree->root, &userInput, clientsIdCompare);
     if (tree->size < temp) {
         puts("client deleted from data base");
     }
-    else puts("couldn't find client's id ");
+    else puts("couldn't find client's licenseNum ");
 }
 
 int deleteAllClients(Tree tree){
@@ -227,5 +224,5 @@ void printClientData(Data data){
     printf("    client's rented car license:  %0.f\n",((Client *)data)->rentedCarLicense);
     printf("    renting date:  %s\n",((Client *)data)->rentDate);
     printf("    renting hour:  %s\n",((Client *)data)->rentHour);
-    printf("    price per day :%0.f\n",((Client *)data)->priceForDay);
+    printf("    price per day: %0.f\n",((Client *)data)->priceForDay);
 }

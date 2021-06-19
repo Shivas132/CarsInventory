@@ -136,8 +136,10 @@ void clientSwitch(int clientChoose,Tree clientTree,Node carRoot) {
                 found = findClient(clientTree->root);
             if (!found->head){
                 puts("client didn't found");}
-            else{printClientList(found->head);
-                 freeList(found);}
+            else {
+                printClientList(found->head);
+            }
+                 freeList(found);
                 break;
             case 4:
                 printClientCarsForGivenRentDate(clientTree->root);

@@ -111,28 +111,23 @@ void freeTree(Tree tree){
     FREE(tree);
 }
 
-Node deleteNode(Tree tree, Node node, void* userInput, double (*comp)(Data, void*), void* deleteParam){
+Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, void*)){
     Node temp, follower, *followerAddr;
-
-    if (!userInput){
-        userInput=deleteParam;
-    }
     if (!node) {
         return NULL;
     }
 
     /* searching wanted node in node's children*/
-    if(comp(node->data, userInput) != 0) {
+    if(comp(node->data, deletedData) != 0) {
         /* Go left*/
-        if(comp(node->data, userInput) > 0) {
-            node->left = deleteNode(tree, node->left, userInput, comp, deleteParam);
+        if(comp(node->data, deletedData) > 0) {
+            node->left = deleteNode(tree, node->left, deletedData, comp);
         }
             /* Go right*/
         else {
-            node->right = deleteNode(tree, node->right, userInput, comp,deleteParam);
+            node->right = deleteNode(tree, node->right, deletedData, comp);
         }
     }
-
     else {
 
 /* Option 1: node is a leaf*/
@@ -163,14 +158,13 @@ Node deleteNode(Tree tree, Node node, void* userInput, double (*comp)(Data, void
             }
             freeNode(tree, node);
             tree->cpy(node, follower->data);
-            *followerAddr = deleteNode(tree, follower, userInput, comp,deleteParam);
+            *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
         }
     }
     return node;
 }
 
 /*-----------------------Linked List Functions----------------------*/
-
 
 void freeListNodes(linkedList list, nodeList node){
     nodeList nextOne;

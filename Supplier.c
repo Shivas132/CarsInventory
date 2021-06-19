@@ -17,7 +17,7 @@ Data setSupplierData(){
 
     /*setting user inputs to fields
      * checking input validation*/
-    puts("please enter supplier's id (10 digits): ");
+    puts("please enter supplier's licenseNum (10 digits): ");
     fillFieldDouble(&id, 10, 1);
     new_supplier->id= id;
 
@@ -76,26 +76,24 @@ Tree createSupplierTree(){
     return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
 }
 
-void deleteSupplierParam(void* userInput) {
-    /*gets input from user*/
-    puts("please enter id for the supplier you wish to delete (10 digits):");
-    fillFieldDouble(userInput, 10, 1);
-}
-
 void deleteSupplier(Tree tree){
+    double userInput = 0;
     int temp =0;
 
     if (!tree->root) {
         puts("supplier tree is empty");
         return;
     }
+    /*gets input from user*/
+    puts("please enter licenseNum for the supplier you wish to delete (10 digits):");
+    fillFieldDouble(&userInput, 10, 1);
 
     temp =tree->size;
-    tree->root= deleteNode(tree, tree->root,NULL,suppliersIdCompare,deleteSupplierParam);
+    tree->root= deleteNode(tree, tree->root, &userInput,suppliersIdCompare);
     if (tree->size < temp) {
         puts("supplier deleted from data base");
     }
-    else puts("couldn't find supplier's id ");
+    else puts("couldn't find supplier's licenseNum ");
 }
 
 
@@ -133,7 +131,7 @@ void addToGreatest(Supplier* greatest,Node node){
     addToGreatest(greatest,node->right);
 }
 
-/*creates and prints an array, containing the id of the 3 suppliers with the highest pastTransactionsSum*/
+/*creates and prints an array, containing the licenseNum of the 3 suppliers with the highest pastTransactionsSum*/
 int threeGreatestSuppliers(Tree tree){
     Supplier greatest[3];
     int i;
