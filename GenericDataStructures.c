@@ -94,6 +94,7 @@ void printTree(Node node, void (*printFunc)(Data)){
 
 void freeNode(Tree tree, Node node){
     tree->fre(node->data);
+    FREE(node->data);
     FREE(node);
     }
 
@@ -156,7 +157,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, voi
                 followerAddr = &(follower->left);
                 follower = follower->left;
             }
-            freeNode(tree, node);
+            tree->fre(node->data);
             tree->cpy(node, follower->data);
             *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
         }

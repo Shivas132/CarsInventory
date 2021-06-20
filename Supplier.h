@@ -10,16 +10,6 @@ typedef struct Supplier{
     double pastTransactionsSum;
 }Supplier;
 
-typedef struct supplierNode_t{
-    Supplier supplier;
-    struct supplierNode_t* left;
-    struct supplierNode_t* right;
-}supplierNode;
-
-typedef struct {
-    supplierNode * root;
-    int size;
-} supplierBST;
 
 /*creates empty supplierNode*/
 Tree createSupplierTree();

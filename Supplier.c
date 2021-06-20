@@ -46,7 +46,6 @@ int addNewSupplier(Tree tree){
 /*free allocated memory*/
 void freeSupplier(Data data){
     FREE(((Supplier *)(data))->name);
-    FREE(data);
 }
 
 /*copying data to destination node.
@@ -85,7 +84,7 @@ void deleteSupplier(Tree tree){
         return;
     }
     /*gets input from user*/
-    puts("please enter licenseNum for the supplier you wish to delete (10 digits):");
+    puts("please enter ID for the supplier you wish to delete (10 digits):");
     fillFieldDouble(&userInput, 10, 1);
 
     temp =tree->size;
@@ -93,7 +92,7 @@ void deleteSupplier(Tree tree){
     if (tree->size < temp) {
         puts("supplier deleted from data base");
     }
-    else puts("couldn't find supplier's licenseNum ");
+    else puts("couldn't find supplier's ID ");
 }
 
 
