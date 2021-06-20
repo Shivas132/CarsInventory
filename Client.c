@@ -197,7 +197,7 @@ void deleteClient(Tree tree){
         return;
     }
     /*gets input from user*/
-    puts("please enter licenseNum for the client you wish to delete (9 digits):");
+    puts("please enter id for the client you wish to delete (9 digits):");
     fillFieldDouble(&userInput, 9, 1);
 
     temp = tree->size;
@@ -205,7 +205,7 @@ void deleteClient(Tree tree){
     if (tree->size < temp) {
         puts("client deleted from data base");
     }
-    else puts("couldn't find client's licenseNum ");
+    else puts("couldn't find client's id ");
 }
 
 int deleteAllClients(Tree tree){

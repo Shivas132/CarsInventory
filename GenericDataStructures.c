@@ -57,7 +57,7 @@ double averageTree(Tree tree,Node node, double(*avgParam)(Node)){
 
 
 int addToArray(Node node, Data* arr, int idx){
-    if(!node){
+    if(node==NULL){
         return idx;
     }
     if(node->left){
@@ -156,7 +156,7 @@ Node deleteNode(Tree tree, Node node, Data deletedData, double (*comp)(Data, voi
                 followerAddr = &(follower->left);
                 follower = follower->left;
             }
-            freeNode(tree, node);
+            tree->fre(node->data);
             tree->cpy(node, follower->data);
             *followerAddr = deleteNode(tree, follower, follower->data, tree->comp);
         }
