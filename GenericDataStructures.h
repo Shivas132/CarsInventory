@@ -15,7 +15,6 @@ struct nodeList{
 struct linkedList{
     nodeList head;
     double (*comp)(void*, void*);
-    void (*fre)(Data);
     };
 
 struct node {

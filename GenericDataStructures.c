@@ -94,6 +94,7 @@ void printTree(Node node, void (*printFunc)(Data)){
 
 void freeNode(Tree tree, Node node){
     tree->fre(node->data);
+    FREE(node->data);
     FREE(node);
     }
 

@@ -15,20 +15,6 @@ typedef struct{
     int velocity;
 }Car;
 
-typedef struct carNode_t{
-    Car car;
-    struct carNode_t* left;
-    struct carNode_t* right;
-}carNode;
-
-typedef struct {
-    carNode* root;
-    int size;
-} carBST;
-
-
-
-
 /*creates empty carNode*/
 Tree createCarTree();
 

@@ -11,6 +11,5 @@ int main(){
     menu(carTree, supplierTree, clientTree);
 
 
-
     return 0;
 }

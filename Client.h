@@ -13,26 +13,6 @@ typedef struct{
     double priceForDay;
 }Client;
 
-typedef struct clientNode_t{
-    Client client;
-    struct clientNode_t* left;
-    struct clientNode_t* right;
-}clientNode;
-
-typedef struct {
-    clientNode* root;
-    int size;
-} clientBST;
-
-typedef struct clientNode_l{
-    Client client;
-    struct clientNode_l* next;
-}clientNode_l;
-
-typedef struct clientList{
-    clientNode_l* head;
-}clientList;
-
 
 /*creates empty clientNode*/
 Tree createClientTree();
@@ -48,14 +28,12 @@ int deleteAllClients(Tree tree);
 
 void printClientCarsForGivenRentDate(Node node);
 
-int clearClientsList(clientList* list);
-
 void printClientData(Data data);
 
 linkedList findClient(Node root);
 
 void printClientList(nodeList node);
 
-void printClientData(Data data);
+
 
 #endif
