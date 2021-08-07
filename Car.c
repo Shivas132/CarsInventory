@@ -2,7 +2,8 @@
 #include <string.h>
 #include "FillField.h"
 
-/*adds new car to the cars tree.*/
+/*generate new car and getting all the information from the user
+ *returns pointer to the new car as Data (void*)*/
 Data setCarData() {
     Car* new_car;
     double licenseNum;
@@ -58,11 +59,7 @@ Data setCarData() {
     return new_car;
 }
 
-int addNewCar(Tree tree){
-    return addNewNode(tree);
-}
-
-/*free allocated memory*/
+/*free car's fields allocated memory*/
 void freeCar(Data data){
     FREE(((Car*)(data))->manufacturer);
     FREE(((Car*)(data))->color);
@@ -89,19 +86,27 @@ int carCopy(Node dest, Data source){
     return 1;
 }
 
-double carCompare(void * car1,void * car2){
+/*comparing between two cars(Data)*/
+double carCompare(void* car1,void* car2){
     return ((Car *)car1)->licenseNum - ((Car *)car2)->licenseNum;
 }
 
+/*comparing between car(Data) and licenseNum (Double) */
 double LicenseCompare(Data car, void* license){
     return ((Car*)(car))->licenseNum - (*(double*)license);
 }
 
-/*allocating new binary search tree pointer. sets values to 0.*/
+/*using generic function addNewNode to add new car to the cars tree*/
+int addNewCar(Tree tree){
+    return addNewNode(tree);
+}
+
+/*using generic function treeCreate to initialize new car tree.*/
 Tree createCarTree(){
     return treeCreate(carCopy, freeCar, carCompare, setCarData);
 }
 
+/*using generic function deleteNode to remove  car node from the tree.*/
 void deleteCar(Tree tree){
     double userInput = 0;
     int temp =0;
@@ -122,6 +127,7 @@ void deleteCar(Tree tree){
     else puts("couldn't find car's licenseNum ");
 }
 
+/*using generic function deleteAllNodes to remove all cars from the tree and free all allocating memory.*/
 int deleteAllCars(Tree tree){
     freeAllNodes(tree, tree->root);
     tree->size = 0;
@@ -161,6 +167,7 @@ int carNumberWithGivenCapacity(Node root, int cap){
     return res;
 }
 
+/*print all the fields of given car*/
 void printCarData(Data data){
     printf("    \nLicense number:  %.0f\n",((Car*)data)->licenseNum);
     printf("    Chassis number:  %s\n",((Car*)data)->chassisNum);

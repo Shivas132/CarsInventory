@@ -1,11 +1,12 @@
-#include "Client.h"
 #include <string.h>
-#include "FillField.h"
 #include <stdio.h>
+#include "FillField.h"
+#include "Client.h"
 
-/*get info from the user and return new client.*/
+
+/*generate new client and getting all the information from the user
+ *returns pointer to the new client as Data (void*)*/
 Data setClientData(){
-
     Client* newClient;
     double id;
     double rentedCarLicense;
@@ -13,7 +14,6 @@ Data setClientData(){
     char rentHour[6];
     double priceForDay;
     newClient = ALLOC(Client, 1);
-
     printf("please enter new client's details: \n");
 
     /*setting user inputs to fields
@@ -46,18 +46,20 @@ Data setClientData(){
 
     return newClient;
 }
-/*---------------------findClient functions---------------------*/
+/*---------------------comparing functions---------------------*/
 
-double dateCompare(void* client, void* date){
+/*comparing between Client and Date*/
+double dateCompare(Data client, Data date){
     return strcmp(((Client*)(client))->rentDate, (char*)date);
 }
 
+/*comparing between client(Data) and id(Double) */
 double clientsIdCompare(Data client, void* id){
     return ((Client*)(client))->id - (*(double*)id);
 }
 
-
-double clientCompare(void * client1, void * client2){
+/*comparing between two clients(Data)*/
+double clientCompare(Data client1, Data client2){
     return ((Client *)client1)->id-((Client *)client2)->id;
 }
 
@@ -85,7 +87,6 @@ void freeClient(Data data){
     FREE(((Client*)(data))->name);
     FREE(((Client*)(data))->surname);
 }
-
 
 
 /*gets rent date from user, prints name and surname of clients that rented a car in this date.*/
@@ -117,10 +118,8 @@ void printClientCarsForGivenRentDate(Node node) {
 }
 
 
-
-
 /*gets searching parameter, and input from user.
- * returns all clients that*/
+ * returns linked list struct with all founded clients */
 linkedList findClient(Node root){
     linkedList clients;
     int userChoice;
@@ -161,7 +160,7 @@ linkedList findClient(Node root){
 }
 
 
-/*prints clients names in liked list*/
+/*prints all clients names in linked list*/
 void printClientList(nodeList node){
     nodeList temp;
     if (!node){
@@ -174,17 +173,17 @@ void printClientList(nodeList node){
     }
 }
 
+/*using generic function addNewNode to add new client to the clients tree*/
 int addNewClient(Tree tree){
     return addNewNode(tree);
 }
 
-
-/*allocating new binary search tree pointer. sets values to 0.*/
+/*using generic function treeCreate to initialize new clients tree.*/
 Tree createClientTree(){
     return treeCreate(clientCopy, freeClient, clientCompare, setClientData);
 }
 
-
+/*using generic function deleteNode to remove client node from the tree.*/
 void deleteClient(Tree tree){
     double userInput = 0;
     int temp =0;
@@ -205,6 +204,7 @@ void deleteClient(Tree tree){
     else puts("couldn't find client's ID ");
 }
 
+/*using generic function deleteAllNodes to remove all clients from the tree and free all allocating memory.*/
 int deleteAllClients(Tree tree){
     freeAllNodes(tree, tree->root);
     tree->size = 0;
@@ -214,6 +214,7 @@ int deleteAllClients(Tree tree){
     return 1;
 }
 
+/*print all the fields of given client*/
 void printClientData(Data data){
     printf("    \nName:  %s\n",((Client *)data)->name);
     printf("    Last Name:  %s\n",((Client *)data)->surname);

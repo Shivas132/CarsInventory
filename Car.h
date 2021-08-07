@@ -15,30 +15,23 @@ typedef struct{
     int velocity;
 }Car;
 
-/*creates empty carNode*/
+/*using generic function treeCreate to initialize new car tree.*/
 Tree createCarTree();
 
-/*adds new car to the cars list[index]. return 1 if succeed, 0 if failed*/
-Data setCarData();
-
+/*using generic function addNewNode to add new car to the cars tree*/
 int addNewCar(Tree tree);
 
-/*gets license number of a car and delete it from the list. returns 1 if succeed, 0 if failed.*/
+/*using generic function deleteNode to remove car node from the tree.*/
 void deleteCar(Tree tree);
 
-/*deletes all the cars from the list. returns 1 if succeed, 0 if failed.*/
+/*using generic function deleteAllNodes to remove all cars from the tree anf free all allocating memory.*/
 int deleteAllCars(Tree tree);
 
-/*returns the number of cars from the list with a given capacity*/
+/*returns the number of cars in the list with a given capacity*/
+/*cap parameter always starts as 0.*/
 int carNumberWithGivenCapacity(Node root, int cap);
 
-double carCompare(void * license1,void * license2);
-
-int carCopy(Node dest, Data source);
-
-void freeCar(Data data);
-
+/*print all the fields of given car*/
 void printCarData(Data data);
-
 
 #endif

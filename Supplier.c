@@ -4,7 +4,8 @@
 #include "GenericDataStructures.h"
 #include <stdio.h>
 
-/*adds new supplier to the head of suppliers list.*/
+/*generate new supplier and getting all the information from the user
+ *returns pointer to the new supplier as Data (void*)*/
 Data setSupplierData(){
     Supplier* new_supplier;
     double  id;
@@ -39,42 +40,20 @@ Data setSupplierData(){
     return new_supplier;
 }
 
-int addNewSupplier(Tree tree){
-    return addNewNode(tree);
-}
+/*---------------------comparing functions---------------------*/
 
-/*free allocated memory*/
-void freeSupplier(Data data){
-    FREE(((Supplier *)(data))->name);
-}
-
-/*copying data to destination node.
- * allocating new memory for dynamic allocated data copying.*/
-int supplierCopy(Node dest, Data source){
-    Supplier * supData = ((Supplier *)dest->data);
-    Supplier * supSource = ((Supplier *)source);
-
-    supData->name = copyField(supSource->name);
-    supData->pastTransactionsSum = supSource->pastTransactionsSum;
-    supData->pastTransactionsNumber= supSource->pastTransactionsSum;
-    supData->id = supSource->id;
-    strcpy(supData->phoneNumber, supSource->phoneNumber);
-    return 1;
-}
-
-double supplierCompare(void * supplier1,void * supplier2) {
+/*comparing between suppliers(Data)*/
+double supplierCompare(Data supplier1,Data supplier2) {
     return ((Supplier *) supplier1)->id - ((Supplier *) supplier2)->id;
 }
-
+/*comparing between supplier(Data) and id(Double) */
 double suppliersIdCompare(Data supplier, void* id){
     return ((Supplier *)(supplier))->id- *((double*)id);
 }
 
-/*allocating new binary search tree pointer. sets values to 0.*/
-Tree createSupplierTree(){
-    return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
-}
 
+
+/*using generic function deleteNode to remove supplier node from the tree.*/
 void deleteSupplier(Tree tree){
     double userInput = 0;
     int temp =0;
@@ -95,7 +74,18 @@ void deleteSupplier(Tree tree){
     else puts("couldn't find supplier's ID ");
 }
 
+/*using generic function deleteAllNodes to remove all suppliers from the tree and free all allocating memory.*/
+int deleteAllSuppliers(Tree tree){
+    freeAllNodes(tree, tree->root);
+    tree->size = 0;
+    tree->root = NULL;
+    puts("deleting all suppliers......\n"
+         "all suppliers deleted!");
+    return 1;
+}
 
+
+/*--------three greatest suppliers helpers--------*/
 
 /*bubble sorting the current list of three greatest suppliers.*/
 void threeGreatestSupplierBubble(Supplier*  greatest){
@@ -112,8 +102,7 @@ void threeGreatestSupplierBubble(Supplier*  greatest){
     }
 }
 
-/*help function for threeGreatestSuppliers.
- *adds supplier to the array if it's in the current three greatest.*/
+/*adds supplier to the array if it's in the current three greatest.*/
 void addToGreatest(Supplier* greatest,Node node){
     Supplier currSupplier;
     if (!node){
@@ -129,6 +118,7 @@ void addToGreatest(Supplier* greatest,Node node){
     addToGreatest(greatest,node->left);
     addToGreatest(greatest,node->right);
 }
+
 
 /*creates and prints an array, containing the licenseNum of the 3 suppliers with the highest pastTransactionsSum*/
 int threeGreatestSuppliers(Tree tree){
@@ -147,11 +137,15 @@ int threeGreatestSuppliers(Tree tree){
     return 1;
 }
 
+/*helper to averageOfSupplierMoney*/
+double getPastTransactionsSum(Node node){
+    return ((Supplier*)node->data)->pastTransactionsSum;
+}
+
 /*print the average of past transactions sum of all suppliers in tree.*/
 void averageOfSupplierMoney(Tree supplierTree) {
         printf("average sum of deals with all suppliers is\n %.2f\n",averageTree(supplierTree,supplierTree->root,getPastTransactionsSum));
 }
-
 
 /*prints supplier's details*/
 void printSupplierData(Data data){
@@ -162,20 +156,37 @@ void printSupplierData(Data data){
     printf("    Sum of past transaction with supplier  :%0.f\n",((Supplier*)data)->pastTransactionsSum);
 }
 
-double getPastTransactionsSum(Node node){
-    return ((Supplier*)node->data)->pastTransactionsSum;
-}
 
-void printSuppliers(Tree tree){
+/*using generic function printTree to print every supplier in the suppliers tree*/
+void printSuppliersTree(Tree tree){
     printTree(tree->root, printSupplierData);
 }
 
-int deleteAllSuppliers(Tree tree){
-    freeAllNodes(tree, tree->root);
-    tree->size = 0;
-    tree->root = NULL;
-    puts("deleting all suppliers......\n"
-         "all suppliers deleted!");
+/*copying data to destination node.
+ * allocating new memory for dynamic allocated data copying.*/
+int supplierCopy(Node dest, Data source){
+    Supplier * supData = ((Supplier *)dest->data);
+    Supplier * supSource = ((Supplier *)source);
+
+    supData->name = copyField(supSource->name);
+    supData->pastTransactionsSum = supSource->pastTransactionsSum;
+    supData->pastTransactionsNumber= supSource->pastTransactionsSum;
+    supData->id = supSource->id;
+    strcpy(supData->phoneNumber, supSource->phoneNumber);
     return 1;
+}
+
+/*using generic function addNewNode to add new supplier to the suppliers tree*/
+int addNewSupplier(Tree tree){
+    return addNewNode(tree);
+}
+/*free allocated memory*/
+void freeSupplier(Data data){
+    FREE(((Supplier *)(data))->name);
+}
+
+/*using generic function treeCreate to initialize new supplier tree.*/
+Tree createSupplierTree(){
+    return treeCreate(supplierCopy, freeSupplier, supplierCompare, setSupplierData);
 }
 
